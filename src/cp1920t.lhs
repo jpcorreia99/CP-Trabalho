@@ -1018,9 +1018,12 @@ extLTree :: Bdt a -> LTree a
 extLTree = cataBdt g where
   g = undefined
 
-inBdt = undefined
+inBdt:: Either a (String,(Bdt a, Bdt a)) -> Bdt a
+inBdt = either Dec Query
 
-outBdt = undefined
+outBdt:: Bdt a -> Either a (String,(Bdt a, Bdt a))
+outBdt (Dec a)  = i1 a
+outBdt (Query(s,(b1,b2))) = i2 (s,(b1,b2)) 
 
 baseBdt = undefined
 recBdt = undefined
