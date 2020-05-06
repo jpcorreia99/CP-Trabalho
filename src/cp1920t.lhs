@@ -1025,12 +1025,13 @@ outBdt:: Bdt a -> Either a (String,(Bdt a, Bdt a))
 outBdt (Dec a)  = i1 a
 outBdt (Query(s,(b1,b2))) = i2 (s,(b1,b2)) 
 
-baseBdt = undefined
-recBdt = undefined
+baseBdt f g h = f -|- (g >< ( h >< h ))  -- bifunctor
 
-cataBdt = undefined
+recBdt f = id -|- (id >< (f >< f ))       -- F f = B(id,id,f) -- lei 47
 
-anaBdt = undefined
+cataBdt gene = gene . (recBdt (cataBdt gene)) . outBdt -- (| g |) = g . F (|g|) . out -l lei  44 + iso in/out
+
+anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g -- lei 53 + iso in/out
 
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree g 
