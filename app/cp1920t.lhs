@@ -85,8 +85,6 @@
 %format .&&&. = "\wedge"
 %format cdots = "\cdots "
 %format pi = "\pi "
-%format quadrado = "^2"
-%format (anaBdt (gene)) = "\ana{" gene "}"
 
 %---------------------------------------------------------------------------
 
@@ -115,13 +113,13 @@
 
 \begin{center}\large
 \begin{tabular}{ll}
-\textbf{Grupo} nr. & 95
+\textbf{Grupo} nr. & 99 (preencher)
 \\\hline
-a84414 & João Correia
+a11111 & Nome1 (preencher)	
 \\
-a89582 & Henrique Ribeiro
+a22222 & Nome2 (preencher)	
 \\
-a85983 & Filipe Felicio 
+a33333 & Nome3 (preencher)	
 \end{tabular}
 \end{center}
 
@@ -1034,25 +1032,7 @@ recBdt f = id -|- (id >< (f >< f ))       -- F f = B(id,id,f) -- lei 47
 cataBdt gene = gene . (recBdt (cataBdt gene)) . outBdt -- (| g |) = g . F (|g|) . out -l lei  44 + iso in/out
 
 anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g -- lei 53 + iso in/out
-\end{code}
 
-\begin{eqnarray*}
-\xymatrix@@C=2cm{
-    |Bdt A|
-           \ar[d]_-{|(anaBdt (gene))|}
-&
-    |B + (String >< (Bdt A)quadrado)|
-           \ar[l]_-{|inBdt|}
-\\
-     |C|
-           \ar[r]^-{|gene|}
-&
-     |A + (String >< (Bdt A)quadrado )|
-           \ar[u]^{|id+(id ><(anaBdt (gene)) quadrado)|}
-}
-\end{eqnarray*}
-
-\begin{code}
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree g 
   where g = undefined
