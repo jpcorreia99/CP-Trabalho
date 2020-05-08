@@ -1018,7 +1018,8 @@ splay l t =  undefined
 \begin{code}
 extLTree :: Bdt a -> LTree a
 extLTree = cataBdt g where
-  g = undefined
+  g = either (Leaf) (Fork . p2)
+
 
 inBdt:: Either a (String,(Bdt a, Bdt a)) -> Bdt a
 inBdt = either Dec Query
@@ -1056,7 +1057,16 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree g 
   where g = undefined
+
+
+
+teste (Leaf a) _ = (Leaf a)
+teste a []  = a
+teste (Fork (t1,t2)) (True:hs) = teste t1 hs
+teste (Fork (t1,t2)) (False:hs) = teste t2 hs
 \end{code}
+
+
 
 
 \subsection*{Problema 4}
