@@ -1039,16 +1039,16 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
 \begin{eqnarray*}
 \xymatrix@@C=2cm{
     |Bdt A|
-           \ar[d]_-{|(anaBdt (gene))|}
 &
-    |B + (String >< (Bdt A)quadrado)|
+    |A + (String >< (Bdt A)quadrado)|
            \ar[l]_-{|inBdt|}
 \\
-     |C|
-           \ar[r]^-{|gene|}
+     |C|    
+           \ar[u]_-{|(anaBdt (g))|}
+           \ar[r]^-{|g|}
 &
-     |A + (String >< (Bdt A)quadrado )|
-           \ar[u]^{|id+(id ><(anaBdt (gene)) quadrado)|}
+     |A + (String >< (C)quadrado )|
+           \ar[u]^{|id+(id ><(anaBdt (g)) quadrado)|}
 }
 \end{eqnarray*}
 

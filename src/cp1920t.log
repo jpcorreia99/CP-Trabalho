@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.1)  6 MAY 2020 22:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.1)  8 MAY 2020 19:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -870,7 +870,7 @@ palatino/uplr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
 </usr/share/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb></usr/share/texmf-d
 ist/fonts/type1/public/xypic/xyatip10.pfb></usr/share/texmf-dist/fonts/type1/pu
 blic/xypic/xybtip10.pfb>
-Output written on cp1920t.pdf (15 pages, 600879 bytes).
+Output written on cp1920t.pdf (15 pages, 600715 bytes).
 PDF statistics:
  331 PDF objects out of 1000 (max. 8388607)
  275 compressed objects within 3 object streams
