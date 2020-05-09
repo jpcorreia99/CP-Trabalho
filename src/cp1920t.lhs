@@ -1056,7 +1056,10 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
 \begin{code}
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree g 
-  where g = undefined
+  where g = either (\a _ -> Leaf a) f where
+            f (l, r)  [] = Fork (l [], r [])
+            f (l, r)  (True:hs) = l hs
+            f (l, r)  (False: hs) = r hs
 
 
 
@@ -1066,9 +1069,14 @@ teste (Fork (t1,t2)) (True:hs) = teste t1 hs
 teste (Fork (t1,t2)) (False:hs) = teste t2 hs
 \end{code}
 
+Ltree               out->             A + Ltree^2
+|                                     |    
+|                                     |  id + (|g|)^2
+|                                     |
+[Bool] -> Ltree      <-            A + ([Bool]->Ltree)^2 
 
-
-
+g = Either (const. Leaf) -- como só recebeu um dos argumentos ddevolve uma função
+            
 \subsection*{Problema 4}
 
 \begin{code}
