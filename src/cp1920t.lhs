@@ -1016,10 +1016,6 @@ splay l t =  undefined
 \subsection*{Problema 3}
 
 \begin{code}
-extLTree :: Bdt a -> LTree a
-extLTree = cataBdt g where
-  g = either (Leaf) (Fork . p2)
-
 
 inBdt:: Either a (String,(Bdt a, Bdt a)) -> Bdt a
 inBdt = either Dec Query
@@ -1046,37 +1042,40 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
 \\
      |C|    
            \ar[u]_-{|(anaBdt (g))|}
-           \ar[r]^-{|g|}
+           \ar[r]^-{|gene|}
 &
      |A + (String >< (C)quadrado )|
-           \ar[u]^{|id+(id ><(anaBdt (g)) quadrado)|}
+           \ar[u]^{|id+(id ><(anaBdt (gene)) quadrado)|}
 }
 \end{eqnarray*}
+\subsection*{extLTree}
+\begin{code}
+A diferença entre as duas estruturas é a presença da String nos nodos, dado que irá ser removido na transformação para LTree
+
+extLTree :: Bdt a -> LTree a
+extLTree = cataBdt g where
+  g = either (Leaf) (Fork . p2)
+\end{code}
+
+\subsection*{navLTree}
+
 
 \begin{code}
-navLTree :: LTree a -> ([Bool] -> LTree a)
-navLTree = cataLTree g 
+
+navLTree2 :: LTree a -> ([Bool] -> LTree a)
+navLTree2 = cataLTree g 
   where g = either (\a _ -> Leaf a) f where
             f (l, r)  [] = Fork (l [], r [])
             f (l, r)  (True:hs) = l hs
             f (l, r)  (False: hs) = r hs
 
+navLTree :: LTree a -> ([Bool] -> LTree a)
+navLTree = cataLTree (either (const . Leaf) (\(l,r) -> cond null (Fork . split l r) (cond head (l . tail) (r . tail)))) 
 
 
-teste (Leaf a) _ = (Leaf a)
-teste a []  = a
-teste (Fork (t1,t2)) (True:hs) = teste t1 hs
-teste (Fork (t1,t2)) (False:hs) = teste t2 hs
 \end{code}
 
-Ltree               out->             A + Ltree^2
-|                                     |    
-|                                     |  id + (|g|)^2
-|                                     |
-[Bool] -> Ltree      <-            A + ([Bool]->Ltree)^2 
 
-g = Either (const. Leaf) -- como só recebeu um dos argumentos ddevolve uma função
-            
 \subsection*{Problema 4}
 
 \begin{code}

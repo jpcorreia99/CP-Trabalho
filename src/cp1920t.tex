@@ -1436,19 +1436,11 @@ outras funções auxiliares que sejam necessárias.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{17}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{42}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{43}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{54}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{extLTree}\mathbin{::}\Conid{Bdt}\;\Varid{a}\to \mathsf{LTree}\;\Varid{a}{}\<[E]%
-\\
-\>[B]{}\Varid{extLTree}\mathrel{=}\Varid{cataBdt}\;\Varid{g}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{g}\mathrel{=}\bot {}\<[E]%
-\\[\blanklineskip]%
 \>[B]{}\Varid{inBdt}\mathbin{::}\Varid{a}+(\Conid{String},(\Conid{Bdt}\;\Varid{a},\Conid{Bdt}\;\Varid{a}))\to \Conid{Bdt}\;\Varid{a}{}\<[E]%
 \\
 \>[B]{}\Varid{inBdt}\mathrel{=}\alt{\Conid{Dec}}{\Conid{Query}}{}\<[E]%
@@ -1482,23 +1474,57 @@ outras funções auxiliares que sejam necessárias.
 \\
      \ensuremath{\mathit C}    
            \ar[u]_-{\ensuremath{\ana{\Varid{g}}}}
-           \ar[r]^-{\ensuremath{\Varid{g}}}
+           \ar[r]^-{\ensuremath{\Varid{gene}}}
 &
      \ensuremath{\Conid{A}\mathbin{+}(\Conid{String}\times(\mathit C)\;^2)}
-           \ar[u]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\ana{\Varid{g}}\;^2)}}
+           \ar[u]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\ana{\Varid{gene}}\;^2)}}
 }
 \end{eqnarray*}
-
+\subsection*{extLTree}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
+\>[B]{}\Varid{extLTree}\mathbin{::}\Conid{Bdt}\;\Varid{a}\to \mathsf{LTree}\;\Varid{a}{}\<[E]%
 \\
-\>[B]{}\Varid{navLTree}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{extLTree}\mathrel{=}\Varid{cataBdt}\;\Varid{g}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\Varid{g}\mathrel{=}\alt{\Conid{Leaf}}{\Conid{Fork}\comp \p2}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{navLTree}
+
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{navLTree2}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{navLTree2}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
+\>[23]{}[\mskip1.5mu \mskip1.5mu]\mathrel{=}\Conid{Fork}\;(\Varid{l}\;[\mskip1.5mu \mskip1.5mu],\Varid{r}\;[\mskip1.5mu \mskip1.5mu]){}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
+\>[23]{}(\Conid{True}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{l}\;\Varid{hs}{}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
+\>[23]{}(\Conid{False}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{r}\;\Varid{hs}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{navLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{cond}\;\Varid{null}\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{cond}\;\Varid{head}\;(\Varid{l}\comp \Varid{tail})\;(\Varid{r}\comp \Varid{tail}))}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
