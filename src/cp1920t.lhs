@@ -1049,8 +1049,9 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
 }
 \end{eqnarray*}
 \subsection*{extLTree}
-\begin{code}
 A diferença entre as duas estruturas é a presença da String nos nodos, dado que irá ser removido na transformação para LTree
+\begin{code}
+
 
 extLTree :: Bdt a -> LTree a
 extLTree = cataBdt g where
@@ -1070,7 +1071,7 @@ navLTree2 = cataLTree g
             f (l, r)  (False: hs) = r hs
 
 navLTree :: LTree a -> ([Bool] -> LTree a)
-navLTree = cataLTree (either (const . Leaf) (\(l,r) -> cond null (Fork . split l r) (cond head (l . tail) (r . tail)))) 
+navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
 
 
 \end{code}
@@ -1079,9 +1080,12 @@ navLTree = cataLTree (either (const . Leaf) (\(l,r) -> cond null (Fork . split l
 \subsection*{Problema 4}
 
 \begin{code}
+x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
 bnavLTree = cataLTree g
-  where g = undefined
-
+  where g = either (\a _ -> Leaf a) f where
+            f (l, r)  Empty = Fork (l Empty, r Empty)
+            f (l, r)  (Node(True,(left,right))) = l left
+            f (l, r)  (Node(False,(left,right))) = r right
 
 pbnavLTree = cataLTree g
   where g = undefined 
