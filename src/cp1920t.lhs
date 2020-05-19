@@ -86,7 +86,7 @@
 %format cdots = "\cdots "
 %format pi = "\pi "
 %format quadrado = "^2"
-%format (anaBdt (gene)) = "\ana{" gene "}"
+%format (anaBdt (g)) = "\ana{" g "}"
 
 %---------------------------------------------------------------------------
 
@@ -1045,7 +1045,7 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
            \ar[r]^-{|gene|}
 &
      |A + (String >< (C)quadrado )|
-           \ar[u]^{|id+(id ><(anaBdt (gene)) quadrado)|}
+           \ar[u]^{|id+(id ><(anaBdt (g)) quadrado)|}
 }
 \end{eqnarray*}
 \subsection*{extLTree}
@@ -1063,6 +1063,9 @@ extLTree = cataBdt g where
 
 \begin{code}
 
+navLTree :: LTree a -> ([Bool] -> LTree a)
+navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
+
 navLTree2 :: LTree a -> ([Bool] -> LTree a)
 navLTree2 = cataLTree g 
   where g = either (\a _ -> Leaf a) f where
@@ -1070,8 +1073,7 @@ navLTree2 = cataLTree g
             f (l, r)  (True:hs) = l hs
             f (l, r)  (False: hs) = r hs
 
-navLTree :: LTree a -> ([Bool] -> LTree a)
-navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
+
 
 
 \end{code}
@@ -1081,6 +1083,13 @@ navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . spli
 
 \begin{code}
 x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
+
+y = Node(True, (Node(True,(Empty,Empty)),Empty))
+
+outNode (Node(a,(b,c))) = (a,(b,c))
+
+bnavLTree2 = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
+
 bnavLTree = cataLTree g
   where g = either (\a _ -> Leaf a) f where
             f (l, r)  Empty = Fork (l Empty, r Empty)

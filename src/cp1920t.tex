@@ -1477,7 +1477,7 @@ outras funções auxiliares que sejam necessárias.
            \ar[r]^-{\ensuremath{\Varid{gene}}}
 &
      \ensuremath{\Conid{A}\mathbin{+}(\Conid{String}\times(\mathit C)\;^2)}
-           \ar[u]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\ana{\Varid{gene}}\;^2)}}
+           \ar[u]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\ana{\Varid{g}}\;^2)}}
 }
 \end{eqnarray*}
 \subsection*{extLTree}
@@ -1504,6 +1504,10 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{navLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;\Varid{null}\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;\Varid{head}\;(\Varid{l}\comp \Varid{tail})\;(\Varid{r}\comp \Varid{tail}))}{}\<[E]%
+\\[\blanklineskip]%
 \>[B]{}\Varid{navLTree2}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
 \\
 \>[B]{}\Varid{navLTree2}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
@@ -1522,10 +1526,6 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \>[3]{}\hsindent{10}{}\<[13]%
 \>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
 \>[23]{}(\Conid{False}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{r}\;\Varid{hs}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
-\\
-\>[B]{}\Varid{navLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;\Varid{null}\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;\Varid{head}\;(\Varid{l}\comp \Varid{tail})\;(\Varid{r}\comp \Varid{tail}))}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1539,8 +1539,10 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Leaf}\;\text{\ttfamily \char34 N~precisa\char34})){}\<[E]%
-\\
-\>[B]{}\Varid{bnavLTree}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{bnavLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;(\Conid{Empty}\equiv )\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;\p1\;(\Varid{l}\comp \p1\comp \p2)\;(\Varid{r}\comp \p2\comp \p2))}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{bnavLTree2}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
