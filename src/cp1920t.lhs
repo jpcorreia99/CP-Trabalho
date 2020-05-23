@@ -1028,9 +1028,9 @@ baseBdt f g h = f -|- (g >< ( h >< h ))  -- bifunctor
 
 recBdt f = id -|- (id >< (f >< f ))       -- F f = B(id,id,f) -- lei 47
 
-cataBdt gene = gene . (recBdt (cataBdt gene)) . outBdt -- (| g |) = g . F (|g|) . out -l lei  44 + iso in/out
+cataBdt g = g . (recBdt (cataBdt g)) . outBdt -- (| g |) = g . F (|g|) . out -l lei  44 + iso in/out
 
-anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g -- lei 53 + iso in/out
+anaBdt g = inBdt . (recBdt (anaBdt g)) . g  -- [(g)] = in . F[(g)] . g -- lei 53 + iso in/out
 \end{code}
 
 \begin{eqnarray*}
@@ -1042,7 +1042,7 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
 \\
      |C|    
            \ar[u]_-{|(anaBdt (g))|}
-           \ar[r]^-{|gene|}
+           \ar[r]^-{|g|}
 &
      |A + (String >< (C)quadrado )|
            \ar[u]^{|id+(id ><(anaBdt (g)) quadrado)|}
@@ -1066,8 +1066,8 @@ extLTree = cataBdt g where
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
 
-navLTree2 :: LTree a -> ([Bool] -> LTree a)
-navLTree2 = cataLTree g 
+navLTreePointWise :: LTree a -> ([Bool] -> LTree a)
+navLTreePointWise = cataLTree g 
   where g = either (\a _ -> Leaf a) f where
             f (l, r)  [] = Fork (l [], r [])
             f (l, r)  (True:hs) = l hs
@@ -1088,9 +1088,9 @@ y = Node(True, (Node(True,(Empty,Empty)),Empty))
 
 outNode (Node(a,(b,c))) = (a,(b,c))
 
-bnavLTree2 = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
+bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
 
-bnavLTree = cataLTree g
+bnavLTreePointWise = cataLTree g
   where g = either (\a _ -> Leaf a) f where
             f (l, r)  Empty = Fork (l Empty, r Empty)
             f (l, r)  (Node(True,(left,right))) = l left
