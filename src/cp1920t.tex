@@ -1502,7 +1502,6 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
 \\
@@ -1516,16 +1515,13 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}[\mskip1.5mu \mskip1.5mu]\mathrel{=}\Conid{Fork}\;(\Varid{l}\;[\mskip1.5mu \mskip1.5mu],\Varid{r}\;[\mskip1.5mu \mskip1.5mu]){}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}\Conid{Fork}\;(\Varid{l}\;[\mskip1.5mu \mskip1.5mu],\Varid{r}\;[\mskip1.5mu \mskip1.5mu]){}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{True}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{l}\;\Varid{hs}{}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{True}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{l}\;\Varid{hs}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{False}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{r}\;\Varid{hs}{}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{False}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{r}\;\Varid{hs}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1536,10 +1532,7 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Leaf}\;\text{\ttfamily \char34 N~precisa\char34})){}\<[E]%
-\\[\blanklineskip]%
 \>[B]{}\Varid{y}\mathrel{=}\Conid{Node}\;(\Conid{True},(\Conid{Node}\;(\Conid{True},(\Conid{Empty},\Conid{Empty})),\Conid{Empty})){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{outNode}\;(\Conid{Node}\;(\Varid{a},(\Varid{b},\Varid{c})))\mathrel{=}(\Varid{a},(\Varid{b},\Varid{c})){}\<[E]%
@@ -1552,21 +1545,47 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}\Conid{Empty}\mathrel{=}\Conid{Fork}\;(\Varid{l}\;\Conid{Empty},\Varid{r}\;\Conid{Empty}){}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}\Conid{Fork}\;(\Varid{l}\;\Conid{Empty},\Varid{r}\;\Conid{Empty}){}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{Node}\;(\Conid{True},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{l}\;\Varid{left}{}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Conid{True},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{l}\;\Varid{left}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{Node}\;(\Conid{False},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{r}\;\Varid{right}{}\<[E]%
-\\[\blanklineskip]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Conid{False},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{r}\;\Varid{right}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{pbnavLTree}
+UnfoldD é o Join da monad Dist. esta irá combinar as probabilidades resultantes das duas subárvores.
+Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{pbnavLTree}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{D}\;[\mskip1.5mu (\Conid{Leaf}\;\Varid{a},\mathrm{1})\mskip1.5mu]}{\Varid{f}}\;\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}\Varid{unfoldD}\;(\Conid{D}\;[\mskip1.5mu (\Varid{l}\;\Conid{Empty},\mathrm{0.5}),(\Varid{r}\;\Conid{Empty},\mathrm{0.5})\mskip1.5mu]){}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Varid{d},(\Varid{b1},\Varid{b2})))\mathrel{=}\Varid{\Conid{Probability}.cond}\;\Varid{d}\;(\Varid{l}\;\Varid{b1})\;(\Varid{r}\;\Varid{b2}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{arvoreDist}\mathrel{=}(\Conid{Node}\;((\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.7}),(\Conid{False},\mathrm{0.3})\mskip1.5mu]),((\Conid{Node}\;((\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.6}),(\Conid{False},\mathrm{0.4})\mskip1.5mu]),(\Conid{Empty},\Conid{Empty}))),\Conid{Empty}))){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Leaf}\;\text{\ttfamily \char34 N~precisa\char34})){}\<[E]%
+\\
+\>[B]{}\Varid{z}\mathrel{=}\Conid{Node}\;(\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.6}),(\Conid{False},\mathrm{0.4})\mskip1.5mu],(\Conid{Empty},\Conid{Empty})){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{testProb}\;(\Conid{Leaf}\;\Varid{a})\;\anonymous \mathrel{=}\Conid{D}\;[\mskip1.5mu (\Conid{Leaf}\;\Varid{a},\mathrm{1})\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{testProb}\;(\Conid{Fork}\;(\Varid{t1},\Varid{t2}))\;\Conid{Empty}\mathrel{=}\Varid{unfoldD}\;(\Conid{D}\;[\mskip1.5mu ((\Varid{testProb}\;\Varid{t1}\;\Conid{Empty}),\mathrm{0.5}),((\Varid{testProb}\;\Varid{t2}\;\Conid{Empty}),\mathrm{05})\mskip1.5mu]){}\<[E]%
+\\
+\>[B]{}\Varid{testProb}\;(\Conid{Fork}\;(\Varid{t1},\Varid{t2}))\;(\Conid{Node}\;(\Varid{d},(\Varid{b1},\Varid{b2})))\mathrel{=}\Varid{\Conid{Probability}.cond}\;\Varid{d}\;(\Varid{testProb}\;\Varid{t1}\;\Varid{b1})\;(\Varid{testProb}\;\Varid{t2}\;\Varid{b2}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

@@ -1069,9 +1069,9 @@ navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . spli
 navLTreePointWise :: LTree a -> ([Bool] -> LTree a)
 navLTreePointWise = cataLTree g 
   where g = either (\a _ -> Leaf a) f where
-            f (l, r)  [] = Fork (l [], r [])
-            f (l, r)  (True:hs) = l hs
-            f (l, r)  (False: hs) = r hs
+            f (l, r) [] = Fork (l [], r [])
+            f (l, r) (True:hs) = l hs
+            f (l, r) (False: hs) = r hs
 
 
 
@@ -1082,7 +1082,6 @@ navLTreePointWise = cataLTree g
 \subsection*{Problema 4}
 
 \begin{code}
-x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
 
 y = Node(True, (Node(True,(Empty,Empty)),Empty))
 
@@ -1092,12 +1091,32 @@ bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork 
 
 bnavLTreePointWise = cataLTree g
   where g = either (\a _ -> Leaf a) f where
-            f (l, r)  Empty = Fork (l Empty, r Empty)
-            f (l, r)  (Node(True,(left,right))) = l left
-            f (l, r)  (Node(False,(left,right))) = r right
+            f (l, r) Empty = Fork (l Empty, r Empty)
+            f (l, r) (Node(True,(left,right))) = l left
+            f (l, r) (Node(False,(left,right))) = r right
+
+\end{code}
+
+\subsection*{pbnavLTree}
+UnfoldD é o Join da monad Dist. esta irá combinar as probabilidades resultantes das duas subárvores.
+Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
+
+\begin{code}
 
 pbnavLTree = cataLTree g
-  where g = undefined 
+  where g = either (\a _ -> D [(Leaf a,1)]) f where
+            f (l, r) Empty = unfoldD (D [(l Empty,0.5),(r Empty,0.5)])
+            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
+
+
+arvoreDist= (Node ((D[(True,0.7),(False,0.3)]),((Node ((D[(True,0.6),(False,0.4)]),(Empty,Empty))),Empty)))
+
+x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
+z = Node(D[(True,0.6),(False,0.4)],(Empty,Empty))
+
+testProb (Leaf a) _ = D[(Leaf a,1)]
+testProb (Fork(t1,t2)) Empty = unfoldD (D [((testProb t1 Empty),0.5),((testProb t2 Empty),05)])
+testProb (Fork(t1,t2)) (Node(d, (b1,b2))) = Probability.cond d (testProb t1 b1) (testProb t2 b2)
 
 \end{code}
 
