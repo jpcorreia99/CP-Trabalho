@@ -359,9 +359,9 @@ o ``kit'' básico, escrito em \Haskell, para realizar o trabalho. Basta executar
 \noindent Abra o ficheiro \texttt{cp1920t.lhs} no seu editor de texto preferido
 e verifique que assim é: todo o texto que se encontra dentro do ambiente
 \begin{quote}\small\tt
-\text{\ttfamily \char92{}begin\char123{}code\char125{}}
+\text{\tt \char92{}begin\char123{}code\char125{}}
 \\ ... \\
-\text{\ttfamily \char92{}end\char123{}code\char125{}}
+\text{\tt \char92{}end\char123{}code\char125{}}
 \end{quote}
 vai ser seleccionado pelo \GHCi\ para ser executado.
 
@@ -393,15 +393,15 @@ geração de gráficos 2D:
     $ cabal install QuickCheck gloss
 \end{Verbatim}
 Para testar uma propriedade \QuickCheck~\ensuremath{\Varid{prop}}, basta invocá-la com o comando:
-\begin{tabbing}\ttfamily
+\begin{tabbing}\tt
 ~~~~~\char62{}~quickCheck~prop\\
-\ttfamily ~~~~~\char43{}\char43{}\char43{}~OK\char44{}~passed~100~tests\char46{}
+\tt ~~~~~\char43{}\char43{}\char43{}~OK\char44{}~passed~100~tests\char46{}
 \end{tabbing}
 Pode mesmo controlar o número de casos de teste e sua complexidade utilizando
 o comando:
-\begin{tabbing}\ttfamily
+\begin{tabbing}\tt
 ~~~~~\char62{}~quickCheckWith~stdArgs~\char123{}~maxSuccess~\char61{}~200\char44{}~maxSize~\char61{}~10~\char125{}~prop\\
-\ttfamily ~~~~~\char43{}\char43{}\char43{}~OK\char44{}~passed~200~tests\char46{}
+\tt ~~~~~\char43{}\char43{}\char43{}~OK\char44{}~passed~200~tests\char46{}
 \end{tabbing}
 Qualquer programador tem, na vida real, de ler e analisar (muito!) código
 escrito por outros. No anexo \ref{sec:codigo} disponibiliza-se algum
@@ -733,9 +733,9 @@ Esta árvore representa o processo de decisão relativo a ser preciso ou
     condições climatéricas. Essencialmente, o processo de decisão é
     efectuado ao "percorrer" a árvore, escolhendo o ramo da esquerda ou
     da direita de acordo com a resposta à pergunta correspondente. Por
-    exemplo, começando da raiz da árvore, responder \ensuremath{[\mskip1.5mu \text{\ttfamily \char34 não\char34},\text{\ttfamily \char34 não\char34}\mskip1.5mu]}
-    leva-nos à decisão \ensuremath{\text{\ttfamily \char34 não~precisa\char34}} e responder \ensuremath{[\mskip1.5mu \text{\ttfamily \char34 não\char34},\text{\ttfamily \char34 sim\char34}\mskip1.5mu]}
-    leva-nos à decisão \ensuremath{\text{\ttfamily \char34 precisa\char34}}.
+    exemplo, começando da raiz da árvore, responder \ensuremath{[\mskip1.5mu \text{\tt \char34 não\char34},\text{\tt \char34 não\char34}\mskip1.5mu]}
+    leva-nos à decisão \ensuremath{\text{\tt \char34 não~precisa\char34}} e responder \ensuremath{[\mskip1.5mu \text{\tt \char34 não\char34},\text{\tt \char34 sim\char34}\mskip1.5mu]}
+    leva-nos à decisão \ensuremath{\text{\tt \char34 precisa\char34}}.
 
 Árvores de decisão binárias podem ser codificadas em \Haskell\ usando
 o seguinte tipo de dados:
@@ -870,7 +870,7 @@ será representada pela distribuição
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{d1}\mathbin{::}\fun{Dist}\;\Conid{Char}{}\<[E]%
 \\
-\>[B]{}\Varid{d1}\mathrel{=}\Conid{D}\;[\mskip1.5mu (\text{\ttfamily 'A'},\mathrm{0.02}),(\text{\ttfamily 'B'},\mathrm{0.12}),(\text{\ttfamily 'C'},\mathrm{0.29}),(\text{\ttfamily 'D'},\mathrm{0.35}),(\text{\ttfamily 'E'},\mathrm{0.22})\mskip1.5mu]{}\<[E]%
+\>[B]{}\Varid{d1}\mathrel{=}\Conid{D}\;[\mskip1.5mu (\text{\tt 'A'},\mathrm{0.02}),(\text{\tt 'B'},\mathrm{0.12}),(\text{\tt 'C'},\mathrm{0.29}),(\text{\tt 'D'},\mathrm{0.35}),(\text{\tt 'E'},\mathrm{0.22})\mskip1.5mu]{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 que o \GHCi\ mostrará assim:
@@ -885,7 +885,7 @@ que o \GHCi\ mostrará assim:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{d2}\mathrel{=}\Varid{uniform}\;(\Varid{words}\;\text{\ttfamily \char34 Uma~frase~de~cinco~palavras\char34}){}\<[E]%
+\>[B]{}\Varid{d2}\mathrel{=}\Varid{uniform}\;(\Varid{words}\;\text{\tt \char34 Uma~frase~de~cinco~palavras\char34}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 isto é
@@ -1074,7 +1074,7 @@ Função de representação de um dicionário:
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{dic\char95 imp}\mathbin{::}[\mskip1.5mu (\Conid{String},[\mskip1.5mu \Conid{String}\mskip1.5mu])\mskip1.5mu]\to \Conid{Dict}{}\<[E]%
 \\
-\>[B]{}\Varid{dic\char95 imp}\mathrel{=}\Conid{Term}\;\text{\ttfamily \char34 \char34}\comp \map \;(\Varid{bmap}\;{}\<[32]%
+\>[B]{}\Varid{dic\char95 imp}\mathrel{=}\Conid{Term}\;\text{\tt \char34 \char34}\comp \map \;(\Varid{bmap}\;{}\<[32]%
 \>[32]{}\Varid{id}\;\Varid{singl})\comp \Varid{untar}\comp \Varid{discollect}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
@@ -1094,34 +1094,34 @@ Dicionário para testes:
 \>[B]{}\Varid{d}\mathbin{::}[\mskip1.5mu (\Conid{String},[\mskip1.5mu \Conid{String}\mskip1.5mu])\mskip1.5mu]{}\<[E]%
 \\
 \>[B]{}\Varid{d}\mathrel{=}{}\<[6]%
-\>[6]{}[\mskip1.5mu (\text{\ttfamily \char34 ABA\char34},[\mskip1.5mu \text{\ttfamily \char34 BRIM\char34}\mskip1.5mu]),{}\<[E]%
+\>[6]{}[\mskip1.5mu (\text{\tt \char34 ABA\char34},[\mskip1.5mu \text{\tt \char34 BRIM\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 ABALO\char34},[\mskip1.5mu \text{\ttfamily \char34 SHOCK\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 ABALO\char34},[\mskip1.5mu \text{\tt \char34 SHOCK\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 AMIGO\char34},[\mskip1.5mu \text{\ttfamily \char34 FRIEND\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 AMIGO\char34},[\mskip1.5mu \text{\tt \char34 FRIEND\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 AMOR\char34},[\mskip1.5mu \text{\ttfamily \char34 LOVE\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 AMOR\char34},[\mskip1.5mu \text{\tt \char34 LOVE\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 MEDO\char34},[\mskip1.5mu \text{\ttfamily \char34 FEAR\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 MEDO\char34},[\mskip1.5mu \text{\tt \char34 FEAR\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 MUDO\char34},[\mskip1.5mu \text{\ttfamily \char34 DUMB\char34},\text{\ttfamily \char34 MUTE\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 MUDO\char34},[\mskip1.5mu \text{\tt \char34 DUMB\char34},\text{\tt \char34 MUTE\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 PE\char34},[\mskip1.5mu \text{\ttfamily \char34 FOOT\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 PE\char34},[\mskip1.5mu \text{\tt \char34 FOOT\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 PEDRA\char34},[\mskip1.5mu \text{\ttfamily \char34 STONE\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 PEDRA\char34},[\mskip1.5mu \text{\tt \char34 STONE\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 POBRE\char34},[\mskip1.5mu \text{\ttfamily \char34 POOR\char34}\mskip1.5mu]),{}\<[E]%
+\>[8]{}(\text{\tt \char34 POBRE\char34},[\mskip1.5mu \text{\tt \char34 POOR\char34}\mskip1.5mu]),{}\<[E]%
 \\
 \>[6]{}\hsindent{2}{}\<[8]%
-\>[8]{}(\text{\ttfamily \char34 PODRE\char34},[\mskip1.5mu \text{\ttfamily \char34 ROTTEN\char34}\mskip1.5mu])\mskip1.5mu]{}\<[E]%
+\>[8]{}(\text{\tt \char34 PODRE\char34},[\mskip1.5mu \text{\tt \char34 ROTTEN\char34}\mskip1.5mu])\mskip1.5mu]{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 Normalização de um dicionário (remoção de entradas vazias):
@@ -1132,7 +1132,7 @@ Normalização de um dicionário (remoção de entradas vazias):
 \>[B]{}\Varid{dic\char95 norm}\mathrel{=}\Varid{collect}\comp \Varid{filter}\;\Varid{p}\comp \Varid{discollect}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{p}\;(\Varid{a},\Varid{b})\mathrel{=}\Varid{a}\mathbin{>}\text{\ttfamily \char34 \char34}\mathrel{\wedge}\Varid{b}\mathbin{>}\text{\ttfamily \char34 \char34}{}\<[E]%
+\>[4]{}\Varid{p}\;(\Varid{a},\Varid{b})\mathrel{=}\Varid{a}\mathbin{>}\text{\tt \char34 \char34}\mathrel{\wedge}\Varid{b}\mathbin{>}\text{\tt \char34 \char34}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 Teste de redundância de um significado \ensuremath{\Varid{s}} para uma palavra \ensuremath{\Varid{p}}:
@@ -1356,7 +1356,7 @@ envolvendo \gloss{Gloss}. Nesse caso, o teste em causa deve fazer parte de uma f
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{run}\mathrel{=}\mathbf{do}\;\{\mskip1.5mu \Varid{system}\;\text{\ttfamily \char34 ghc~cp1920t\char34};\Varid{system}\;\text{\ttfamily \char34 ./cp1920t\char34}\mskip1.5mu\}{}\<[E]%
+\>[B]{}\Varid{run}\mathrel{=}\mathbf{do}\;\{\mskip1.5mu \Varid{system}\;\text{\tt \char34 ghc~cp1920t\char34};\Varid{system}\;\text{\tt \char34 ./cp1920t\char34}\mskip1.5mu\}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1538,7 +1538,7 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Leaf}\;\text{\ttfamily \char34 N~precisa\char34})){}\<[E]%
+\>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\tt \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\tt \char34 Precisa\char34},\Conid{Leaf}\;\text{\tt \char34 N~precisa\char34})){}\<[E]%
 \\
 \>[B]{}\Varid{bnavLTree}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
 \\
@@ -1581,7 +1581,7 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \>[B]{}\Varid{janela}\mathrel{=}\Conid{InWindow}\;{}\<[E]%
 \\
 \>[B]{}\hsindent{14}{}\<[14]%
-\>[14]{}\text{\ttfamily \char34 Truchet\char34}\;{}\<[31]%
+\>[14]{}\text{\tt \char34 Truchet\char34}\;{}\<[31]%
 \>[31]{}\mbox{\onelinecomment  window title}{}\<[E]%
 \\
 \>[B]{}\hsindent{14}{}\<[14]%
