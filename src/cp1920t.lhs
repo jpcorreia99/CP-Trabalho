@@ -989,21 +989,37 @@ dic_in = undefined
 
 \begin{code}
 maisDir = cataBTree g
-  where g = undefined
+  where g = either (const Nothing) f 
+           where f (a,(t1,Nothing)) = Just a
+                 f (a,(t1,t2)) = t2
+                 
+maisEsq = cataBTree g 
+  where g = either (const Nothing) f
+            where f (a,(Nothing,t2)) = Just a
+                  f (a,(t1,t2)) = t1
 
-maisEsq = cataBTree g
-  where g = undefined
+insOrd' = undefined
 
-insOrd' x = cataBTree g 
-  where g = undefined
+insOrd a x = anaBTree f (Just a,x)
+            where f (Nothing,Empty) = i1()
+                  f (Just a,Empty) = i2(a,((Nothing,Empty),(Nothing,Empty)))
+                  f (Just a,Node (x,(t1,t2))) | a < x = i2(x,((Just a,t1),(Nothing,t2)))
+                                              | otherwise = i2(x,((Nothing,t1),(Just a,t2)))
+                  f (Nothing,Node (x,(t1,t2))) = i2(x,((Nothing,t1),(Nothing,t2)))
 
-insOrd a x = undefined
+
 
 isOrd' = cataBTree g
   where g = undefined
 
-isOrd = undefined
+--isOrd ::  (Ord a) => BTree a -> Bool
+isOrd = p1 . cataBTree g 
+      where g = either (const (True,Empty)) (split (f2 (funcaoComparacao . Node)) (Node . f))
+            f = (id >< (p2 >< p2)) --(a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)
+            f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c)
 
+funcaoComparacao :: (Ord a) => BTree a -> Bool 		
+funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((< a).p1) (outBTree t1)) && (either (const True) ((> a).p1) (outBTree t2))
 
 rrot = undefined
 
