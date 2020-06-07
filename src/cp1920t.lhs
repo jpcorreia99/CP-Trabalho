@@ -1166,7 +1166,7 @@ anaBdt g = inBdt . (recBdt (anaBdt g)) . g  -- [(g)] = in . F[(g)] . g -- lei 53
 }
 \end{eqnarray*}
 \subsection*{extLTree}
-A diferença entre as duas estruturas é a presença da String nos nodos, dado que irá ser removido na transformação para LTree
+A diferença em termos estruturais entre os dois tipos de dados é a presença da String nos nodos, informação que irá ser removida na transformação para LTree
 \begin{code}
 
 
@@ -1219,6 +1219,11 @@ UnfoldD é o Join da monad Dist. esta irá combinar as probabilidades resultante
 Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
 
 \begin{code}
+
+pbnavLTreePointFree = cataLTree (either (const . certainly . Leaf) undefined)
+  {-where g = either (\a _ -> D [(Leaf a,1)]) f where
+            f (l, r) Empty = unfoldD (D [(l Empty,0.5),(r Empty,0.5)])
+            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)-}
 
 pbnavLTree = cataLTree g
   where g = either (\a _ -> D [(Leaf a,1)]) f where
