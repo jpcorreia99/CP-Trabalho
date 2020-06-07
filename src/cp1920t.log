@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.8)  19 MAY 2020 15:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.8)  31 MAY 2020 19:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -824,89 +824,84 @@ Overfull \hbox (18.06151pt too wide) in paragraph at lines 1366--1370
 \openout5 = `cp1920t.ptb'.
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
  [][] 
  []
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
  [][] 
  []
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
  [][] 
  []
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
  [][] 
  []
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
  [][][][] 
  []
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
- [][][][][][] 
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
+ [][][][] 
  []
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
- [][][][][][] 
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
+ [][][][] 
  []
 
 
-Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1530
- [][][][][][] 
+Overfull \hbox (13.30981pt too wide) in paragraph at lines 1501--1526
+ [][][][] 
  []
 
 \openout5 = `cp1920t.ptb'.
 
 
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
  [][] 
  []
 
 
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
  [][] 
  []
 
 
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
  [][] 
  []
 
 
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
+ [][] 
+ []
+
+
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
  [][][][] 
  []
 
 
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
- [][][][][][] 
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
+ [][][][] 
  []
 
 
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
- [][][][][][] 
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
+ [][][][] 
  []
 
 
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
- [][][][][][] 
- []
-
-
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
- [][] 
- []
-
-
-Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
+Overfull \hbox (200.80742pt too wide) in paragraph at lines 1531--1556
  [][][][] 
  []
 
@@ -914,14 +909,65 @@ Overfull \hbox (62.47647pt too wide) in paragraph at lines 1535--1567
 \openout5 = `cp1920t.ptb'.
 
 
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][][][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][][][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][][][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][] 
+ []
+
+
+Overfull \hbox (81.61198pt too wide) in paragraph at lines 1562--1590
+ [][] 
+ []
+
+\openout5 = `cp1920t.ptb'.
+
 No file cp1920t.ind.
 No file cp1920t.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1618.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1641.
 [15]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1618.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1641.
  (./cp1920t.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1618.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1618.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1641.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1641.
 
 Package rerunfilecheck Info: File `cp1920t.out' has not changed.
 (rerunfilecheck)             Checksum: 628570B73880F7F6B343CF9F839CDB98;365.
@@ -929,11 +975,11 @@ Package rerunfilecheck Info: File `cp1920t.out' has not changed.
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1618.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1641.
  ) 
 Here is how much of TeX's memory you used:
- 13221 strings out of 492167
- 187228 string characters out of 6131559
+ 13222 strings out of 492167
+ 187239 string characters out of 6131559
  357978 words of memory out of 5000000
  17234 multiletter control sequences out of 15000+600000
  36967 words of font info for 111 fonts, out of 8000000 for 9000
@@ -958,10 +1004,10 @@ palatino/uplr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
 </usr/share/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb></usr/share/texmf-d
 ist/fonts/type1/public/xypic/xyatip10.pfb></usr/share/texmf-dist/fonts/type1/pu
 blic/xypic/xybtip10.pfb>
-Output written on cp1920t.pdf (15 pages, 602539 bytes).
+Output written on cp1920t.pdf (15 pages, 603442 bytes).
 PDF statistics:
- 333 PDF objects out of 1000 (max. 8388607)
- 277 compressed objects within 3 object streams
- 70 named destinations out of 1000 (max. 500000)
+ 334 PDF objects out of 1000 (max. 8388607)
+ 278 compressed objects within 3 object streams
+ 71 named destinations out of 1000 (max. 500000)
  84 words of extra memory for PDF output out of 10000 (max. 10000000)
 

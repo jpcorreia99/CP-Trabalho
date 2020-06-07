@@ -1044,9 +1044,9 @@ baseBdt f g h = f -|- (g >< ( h >< h ))  -- bifunctor
 
 recBdt f = id -|- (id >< (f >< f ))       -- F f = B(id,id,f) -- lei 47
 
-cataBdt gene = gene . (recBdt (cataBdt gene)) . outBdt -- (| g |) = g . F (|g|) . out -l lei  44 + iso in/out
+cataBdt g = g . (recBdt (cataBdt g)) . outBdt -- (| g |) = g . F (|g|) . out -l lei  44 + iso in/out
 
-anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g -- lei 53 + iso in/out
+anaBdt g = inBdt . (recBdt (anaBdt g)) . g  -- [(g)] = in . F[(g)] . g -- lei 53 + iso in/out
 \end{code}
 
 \begin{eqnarray*}
@@ -1058,7 +1058,7 @@ anaBdt gene = inBdt . (recBdt (anaBdt gene)) . gene  -- [(g)] = in . F[(g)] . g 
 \\
      |C|    
            \ar[u]_-{|(anaBdt (g))|}
-           \ar[r]^-{|gene|}
+           \ar[r]^-{|g|}
 &
      |A + (String >< (C)quadrado )|
            \ar[u]^{|id+(id ><(anaBdt (g)) quadrado)|}
@@ -1082,12 +1082,12 @@ extLTree = cataBdt g where
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
 
-navLTree2 :: LTree a -> ([Bool] -> LTree a)
-navLTree2 = cataLTree g 
+navLTreePointWise :: LTree a -> ([Bool] -> LTree a)
+navLTreePointWise = cataLTree g 
   where g = either (\a _ -> Leaf a) f where
-            f (l, r)  [] = Fork (l [], r [])
-            f (l, r)  (True:hs) = l hs
-            f (l, r)  (False: hs) = r hs
+            f (l, r) [] = Fork (l [], r [])
+            f (l, r) (True:hs) = l hs
+            f (l, r) (False: hs) = r hs
 
 
 
@@ -1098,22 +1098,41 @@ navLTree2 = cataLTree g
 \subsection*{Problema 4}
 
 \begin{code}
-x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
 
 y = Node(True, (Node(True,(Empty,Empty)),Empty))
 
 outNode (Node(a,(b,c))) = (a,(b,c))
 
-bnavLTree2 = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
+bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
 
-bnavLTree = cataLTree g
+bnavLTreePointWise = cataLTree g
   where g = either (\a _ -> Leaf a) f where
-            f (l, r)  Empty = Fork (l Empty, r Empty)
-            f (l, r)  (Node(True,(left,right))) = l left
-            f (l, r)  (Node(False,(left,right))) = r right
+            f (l, r) Empty = Fork (l Empty, r Empty)
+            f (l, r) (Node(True,(left,right))) = l left
+            f (l, r) (Node(False,(left,right))) = r right
+
+\end{code}
+
+\subsection*{pbnavLTree}
+UnfoldD é o Join da monad Dist. esta irá combinar as probabilidades resultantes das duas subárvores.
+Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
+
+\begin{code}
 
 pbnavLTree = cataLTree g
-  where g = undefined 
+  where g = either (\a _ -> D [(Leaf a,1)]) f where
+            f (l, r) Empty = unfoldD (D [(l Empty,0.5),(r Empty,0.5)])
+            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
+
+
+arvoreDist= (Node ((D[(True,0.7),(False,0.3)]),((Node ((D[(True,0.6),(False,0.4)]),(Empty,Empty))),Empty)))
+
+x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
+z = Node(D[(True,0.6),(False,0.4)],(Empty,Empty))
+
+testProb (Leaf a) _ = D[(Leaf a,1)]
+testProb (Fork(t1,t2)) Empty = unfoldD (D [((testProb t1 Empty),0.5),((testProb t2 Empty),05)])
+testProb (Fork(t1,t2)) (Node(d, (b1,b2))) = Probability.cond d (testProb t1 b1) (testProb t2 b2)
 
 \end{code}
 

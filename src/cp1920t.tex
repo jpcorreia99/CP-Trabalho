@@ -1439,7 +1439,7 @@ outras funções auxiliares que sejam necessárias.
 \column{17}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{42}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{43}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{54}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{45}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{inBdt}\mathbin{::}\Varid{a}+(\Conid{String},(\Conid{Bdt}\;\Varid{a},\Conid{Bdt}\;\Varid{a}))\to \Conid{Bdt}\;\Varid{a}{}\<[E]%
 \\
@@ -1458,10 +1458,10 @@ outras funções auxiliares que sejam necessárias.
 \>[B]{}\Varid{recBdt}\;\Varid{f}\mathrel{=}\Varid{id}+(\Varid{id}\times(\Varid{f}\times\Varid{f})){}\<[43]%
 \>[43]{}\mbox{\onelinecomment  F f = B(id,id,f) -- lei 47}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{cataBdt}\;\Varid{gene}\mathrel{=}\Varid{gene}\comp (\Varid{recBdt}\;(\Varid{cataBdt}\;\Varid{gene}))\comp \Varid{outBdt}\mbox{\onelinecomment  (\ensuremath{\Varid{g}}) = g . F (\ensuremath{\Varid{g}}) . out -l lei  44 + iso in/out}{}\<[E]%
+\>[B]{}\Varid{cataBdt}\;\Varid{g}\mathrel{=}\Varid{g}\comp (\Varid{recBdt}\;(\Varid{cataBdt}\;\Varid{g}))\comp \Varid{outBdt}\mbox{\onelinecomment  (\ensuremath{\Varid{g}}) = g . F (\ensuremath{\Varid{g}}) . out -l lei  44 + iso in/out}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\ana{\Varid{gene}}\mathrel{=}\Varid{inBdt}\comp (\Varid{recBdt}\;\ana{\Varid{gene}})\comp \Varid{gene}{}\<[54]%
-\>[54]{}\mbox{\onelinecomment  [(g)] = in . F[(g)] . g -- lei 53 + iso in/out}{}\<[E]%
+\>[B]{}\ana{\Varid{g}}\mathrel{=}\Varid{inBdt}\comp (\Varid{recBdt}\;\ana{\Varid{g}})\comp \Varid{g}{}\<[45]%
+\>[45]{}\mbox{\onelinecomment  [(g)] = in . F[(g)] . g -- lei 53 + iso in/out}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1474,7 +1474,7 @@ outras funções auxiliares que sejam necessárias.
 \\
      \ensuremath{\mathit C}    
            \ar[u]_-{\ensuremath{\ana{\Varid{g}}}}
-           \ar[r]^-{\ensuremath{\Varid{gene}}}
+           \ar[r]^-{\ensuremath{\Varid{g}}}
 &
      \ensuremath{\Conid{A}\mathbin{+}(\Conid{String}\times(\mathit C)\;^2)}
            \ar[u]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\ana{\Varid{g}}\;^2)}}
@@ -1502,30 +1502,26 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
 \\
 \>[B]{}\Varid{navLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;\Varid{null}\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;\Varid{head}\;(\Varid{l}\comp \Varid{tail})\;(\Varid{r}\comp \Varid{tail}))}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{navLTree2}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
+\>[B]{}\Varid{navLTreePointWise}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
 \\
-\>[B]{}\Varid{navLTree2}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{navLTreePointWise}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}[\mskip1.5mu \mskip1.5mu]\mathrel{=}\Conid{Fork}\;(\Varid{l}\;[\mskip1.5mu \mskip1.5mu],\Varid{r}\;[\mskip1.5mu \mskip1.5mu]){}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}\Conid{Fork}\;(\Varid{l}\;[\mskip1.5mu \mskip1.5mu],\Varid{r}\;[\mskip1.5mu \mskip1.5mu]){}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{True}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{l}\;\Varid{hs}{}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{True}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{l}\;\Varid{hs}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{False}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{r}\;\Varid{hs}{}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{False}\mathbin{:}\Varid{hs})\mathrel{=}\Varid{r}\;\Varid{hs}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1536,33 +1532,60 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Leaf}\;\text{\ttfamily \char34 N~precisa\char34})){}\<[E]%
+\>[B]{}\Varid{y}\mathrel{=}\Conid{Node}\;(\Conid{True},(\Conid{Node}\;(\Conid{True},(\Conid{Empty},\Conid{Empty})),\Conid{Empty})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{bnavLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;(\Conid{Empty}\equiv )\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;\p1\;(\Varid{l}\comp \p1\comp \p2)\;(\Varid{r}\comp \p2\comp \p2))}{}\<[E]%
+\>[B]{}\Varid{outNode}\;(\Conid{Node}\;(\Varid{a},(\Varid{b},\Varid{c})))\mathrel{=}(\Varid{a},(\Varid{b},\Varid{c})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{bnavLTree2}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{bnavLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;(\Conid{Empty}\equiv )\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;(\p1\comp \Varid{outNode})\;(\Varid{l}\comp \p1\comp \p2\comp \Varid{outNode})\;(\Varid{r}\comp \p2\comp \p2\comp \Varid{outNode}))}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{bnavLTreePointWise}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}\Conid{Empty}\mathrel{=}\Conid{Fork}\;(\Varid{l}\;\Conid{Empty},\Varid{r}\;\Conid{Empty}){}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}\Conid{Fork}\;(\Varid{l}\;\Conid{Empty},\Varid{r}\;\Conid{Empty}){}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{Node}\;(\Conid{True},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{l}\;\Varid{left}{}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Conid{True},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{l}\;\Varid{left}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;{}\<[23]%
-\>[23]{}(\Conid{Node}\;(\Conid{False},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{r}\;\Varid{right}{}\<[E]%
-\\[\blanklineskip]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Conid{False},(\Varid{left},\Varid{right})))\mathrel{=}\Varid{r}\;\Varid{right}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{pbnavLTree}
+UnfoldD é o Join da monad Dist. esta irá combinar as probabilidades resultantes das duas subárvores.
+Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{pbnavLTree}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{D}\;[\mskip1.5mu (\Conid{Leaf}\;\Varid{a},\mathrm{1})\mskip1.5mu]}{\Varid{f}}\;\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}\Varid{unfoldD}\;(\Conid{D}\;[\mskip1.5mu (\Varid{l}\;\Conid{Empty},\mathrm{0.5}),(\Varid{r}\;\Conid{Empty},\mathrm{0.5})\mskip1.5mu]){}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Varid{d},(\Varid{b1},\Varid{b2})))\mathrel{=}\Varid{\Conid{Probability}.cond}\;\Varid{d}\;(\Varid{l}\;\Varid{b1})\;(\Varid{r}\;\Varid{b2}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{arvoreDist}\mathrel{=}(\Conid{Node}\;((\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.7}),(\Conid{False},\mathrm{0.3})\mskip1.5mu]),((\Conid{Node}\;((\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.6}),(\Conid{False},\mathrm{0.4})\mskip1.5mu]),(\Conid{Empty},\Conid{Empty}))),\Conid{Empty}))){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Leaf}\;\text{\ttfamily \char34 N~precisa\char34})){}\<[E]%
+\\
+\>[B]{}\Varid{z}\mathrel{=}\Conid{Node}\;(\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.6}),(\Conid{False},\mathrm{0.4})\mskip1.5mu],(\Conid{Empty},\Conid{Empty})){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{testProb}\;(\Conid{Leaf}\;\Varid{a})\;\anonymous \mathrel{=}\Conid{D}\;[\mskip1.5mu (\Conid{Leaf}\;\Varid{a},\mathrm{1})\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{testProb}\;(\Conid{Fork}\;(\Varid{t1},\Varid{t2}))\;\Conid{Empty}\mathrel{=}\Varid{unfoldD}\;(\Conid{D}\;[\mskip1.5mu ((\Varid{testProb}\;\Varid{t1}\;\Conid{Empty}),\mathrm{0.5}),((\Varid{testProb}\;\Varid{t2}\;\Conid{Empty}),\mathrm{05})\mskip1.5mu]){}\<[E]%
+\\
+\>[B]{}\Varid{testProb}\;(\Conid{Fork}\;(\Varid{t1},\Varid{t2}))\;(\Conid{Node}\;(\Varid{d},(\Varid{b1},\Varid{b2})))\mathrel{=}\Varid{\Conid{Probability}.cond}\;\Varid{d}\;(\Varid{testProb}\;\Varid{t1}\;\Varid{b1})\;(\Varid{testProb}\;\Varid{t2}\;\Varid{b2}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
