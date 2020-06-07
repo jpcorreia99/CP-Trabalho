@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 \indexentry{U.Minho!Departamento de Informática|hyperpage}{1}
 \indexentry{Cálculo de Programas|hyperpage}{1}
 \indexentry{Haskell|hyperpage}{1}
@@ -91,3 +93,4 @@
 \indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{15}
 \indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{15}
 \indexentry{Função!\emph  {uncurry}|hyperpage}{15}
+>>>>>>> ff54a6efc75fdfc098288b1b365c54e9f54a0237

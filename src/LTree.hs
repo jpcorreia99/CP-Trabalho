@@ -10,7 +10,7 @@ import List
 
 -- (1) Datatype definition -----------------------------------------------------
 
-data LTree a = Leaf a | Fork (LTree a, LTree a) deriving (Show, Eq)
+data LTree a = Leaf a | Fork (LTree a, LTree a) deriving (Show, Eq,Ord)
 
 inLTree = either Leaf Fork
 
