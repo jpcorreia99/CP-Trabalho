@@ -970,18 +970,106 @@ outras funções auxiliares que sejam necessárias.
 
 \subsection*{Problema 1}
 \begin{code}
+
+data XNat a = Zero a | Succ (XNat a) deriving Show
+inXNat = either Zero Succ
+outXNat (Zero a) = Left a
+outXNat (Succ n) = Right n
+
+baseXNat f g = f -|- g
+recXNat f = baseXNat id f
+cataXNat a = a . (recXNat (cataXNat a)) . outXNat
+anaXNat f = inXNat . (recXNat (anaXNat f)) . f
+hyloXNat a c = cataXNat a . anaXNat c
+
+codiag = either id id
+tailr = hyloXNat codiag
+while2 p f g = tailr ((g -|- f) . grd (not . p))
+
 discollect :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
-discollect = undefined
+discollect = cataList g where
+	g = either (const []) (uncurry (++) . (f >< id))
+		where f (a,l) = map (split (const a)  id) l
 
 dic_exp :: Dict -> [(String,[String])]
 dic_exp = collect . tar
 
 tar = cataExp g where
-  g = undefined
+  g = either (singl . (split (const "") id)) (f)
+	where f (a,b) = map ((++) a >< id) (concat b) 
 
-dic_rd = undefined
 
-dic_in = undefined
+
+{-dic_rd :: String -> Dict -> Maybe [String]
+dic_rd s d = while2 p loopBody exit (s,Just d)
+	where p(a,b) = (a /= [] && isJust b)
+	      exit(_,Nothing) = Nothing
+              exit([], Just (Var x)) = Just [x]
+	      exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
+					| otherwise = f l 
+	      	where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) -}
+
+dic_rd :: String -> Dict -> Maybe [String]
+dic_rd s d = while2 p loopBody exit (s,Just d)
+	where p(a,b) = (a /= [] && isJust b)
+	      exit(_,Nothing) = Nothing
+              exit([], Just (Var x)) = Just [x]
+	      exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
+					| otherwise = f l 
+	      	where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) 
+	      
+
+loopBody (s,Just (Var v)) = (s,Nothing)
+loopBody(s,Just (Term o l)) | (o == []) = (s, termLsearch s l)
+		            | (head s == head o) = (tail s,Just (Term o l))	
+	              	    | otherwise = (s, termLsearch s l) 
+
+		 
+	
+termLsearch s ((Term o l):xs) = if (head s == head o) then Just (Term o l) else termLsearch s xs
+termLsearch s (_:xs) = termLsearch s xs
+termLsearch _ [] = Nothing 
+
+isJust (Just _) = True
+isJust _ = False
+
+isLeft (Left _) = True
+isLeft _ = False
+
+
+
+dic_in :: String -> String -> Dict -> Dict
+dic_in p t d = dic_in_aux (Just (traductionToDict (p,t)), d)
+
+
+dic_in_aux :: (Maybe (Dict), Dict) -> Dict
+dic_in_aux = anaExp g
+	where g(_,Var v) = i1(v)
+	      g(Just (Term a b),Term o l)  | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
+					   | (head o == head a) =  recExp (split (const (Just (head b))) id)  (outExp(Term o (insertIfAbsent (head b,l))))
+					   | otherwise = recExp (split nothing id)  (outExp (Term o l))
+	      g(Nothing, v) =  recExp (split nothing id) (outExp v)
+
+
+{-
+insertIfPresent :: (Dict,[Dict]) -> [Dict]
+insertIfPresent = hyloSList f g
+	where g (Term a b, ((Term o l):ds)) | (head a == head o) = i1((Term o l):ds)
+					    | otherwise = i2(Term o l, (Term a b, ds))
+	      g (l, (Var x):ds) = i2 (Var x, (l,ds))
+	      g (l,[]) = i1(singl l)
+	      f = either id cons-}
+
+insertIfAbsent ((Term o l),((Term a b):ts)) = if (head o == head a) then ((Term a b):ts) else (Term a b):(insertIfAbsent((Term o l),ts))
+insertIfAbsent ((Term o l),[]) =  [(Term o l)]
+insertIfAbsent (l,(t:ts)) = t:(insertIfAbsent(l,ts))
+
+
+traductionToDict :: (String,String) -> Dict
+traductionToDict = anaExp g where
+	g([],t) = i1(t);
+	g(p:ps,t) = i2(singl p, singl (ps,t))
+
 
 \end{code}
 
@@ -989,21 +1077,37 @@ dic_in = undefined
 
 \begin{code}
 maisDir = cataBTree g
-  where g = undefined
+  where g = either (const Nothing) f 
+           where f (a,(t1,Nothing)) = Just a
+                 f (a,(t1,t2)) = t2
+                 
+maisEsq = cataBTree g 
+  where g = either (const Nothing) f
+            where f (a,(Nothing,t2)) = Just a
+                  f (a,(t1,t2)) = t1
 
-maisEsq = cataBTree g
-  where g = undefined
+insOrd' = undefined
 
-insOrd' x = cataBTree g 
-  where g = undefined
+insOrd a x = anaBTree f (Just a,x)
+            where f (Nothing,Empty) = i1()
+                  f (Just a,Empty) = i2(a,((Nothing,Empty),(Nothing,Empty)))
+                  f (Just a,Node (x,(t1,t2))) | a < x = i2(x,((Just a,t1),(Nothing,t2)))
+                                              | otherwise = i2(x,((Nothing,t1),(Just a,t2)))
+                  f (Nothing,Node (x,(t1,t2))) = i2(x,((Nothing,t1),(Nothing,t2)))
 
-insOrd a x = undefined
+
 
 isOrd' = cataBTree g
   where g = undefined
 
-isOrd = undefined
+--isOrd ::  (Ord a) => BTree a -> Bool
+isOrd = p1 . cataBTree g 
+      where g = either (const (True,Empty)) (split (f2 (funcaoComparacao . Node)) (Node . f))
+            f = (id >< (p2 >< p2)) --(a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)
+            f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c)
 
+funcaoComparacao :: (Ord a) => BTree a -> Bool 		
+funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((< a).p1) (outBTree t1)) && (either (const True) ((> a).p1) (outBTree t2))
 
 rrot = undefined
 

@@ -10,7 +10,7 @@ import Data.Monoid
 
 -- (1) Datatype definition -----------------------------------------------------
 
-data BTree a = Empty | Node(a, (BTree a, BTree a)) deriving (Show,Eq)
+data BTree a = Empty | Node(a, (BTree a, BTree a)) deriving Show
 
 inBTree :: Either () (b,(BTree b,BTree b)) -> BTree b
 inBTree = either (const Empty) Node
@@ -121,7 +121,7 @@ strategy(d,n+1) = Right ((n,d),((not d,n),(not d,n)))
 
 {--
     The Towers of Hanoi problem comes from a puzzle marketed in 1883
-    by the French mathematician ï¿½douard Lucas, under the pseudonym
+    by the French mathematician Édouard Lucas, under the pseudonym
     Claus. The puzzle is based on a legend according to which
     there is a temple, apparently in Bramah rather than in Hanoi as
     one might expect, where there are three giant poles fixed in the
@@ -135,7 +135,7 @@ strategy(d,n+1) = Right ((n,d),((not d,n),(not d,n)))
     the day that they completed their task the world would come to
     an end!
     
-    There is a wellï¿½known inductive solution to the problem given
+    There is a well­known inductive solution to the problem given
     by the pseudocode below. In this solution we make use of the fact
     that the given problem is symmetrical with respect to all three
     poles. Thus it is undesirable to name the individual poles. Instead
@@ -148,18 +148,18 @@ strategy(d,n+1) = Right ((n,d),((not d,n),(not d,n)))
     to the smallest rather than the largest disk has the advantage
     that the number of the disk that is moved on any day is independent
     of the total number of disks to be moved.) Directions are boolean
-    values, true representing a clockwise movement and false an antiï¿½clockwise
+    values, true representing a clockwise movement and false an anti­clockwise
     movement. The pair (k,d') means move the disk numbered k from
     its current position in the direction d'. The semicolon operator
     concatenates sequences together, [] denotes an empty sequence
     and [x] is a sequence with exactly one element x. Taking the pairs
     in order from left to right, the complete sequence H n d prescribes
-    how to move the n smallest disks oneï¿½byï¿½one from one pole to the
+    how to move the n smallest disks one­by­one from one pole to the
     next pole in the direction d following the rule of never placing
     a larger disk on top of a smaller disk.
     
     H 0     d = [],
-    H (n+1) d = H n ï¿½d ; [ (n, d) ] ; H n ï¿½d.
+    H (n+1) d = H n ¬d ; [ (n, d) ] ; H n ¬d.
     
     (excerpt from R. Backhouse, M. Fokkinga / Information Processing
     Letters 77 (2001) 71--76)
