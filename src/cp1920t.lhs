@@ -991,6 +991,10 @@ discollect = cataList g where
 	g = either (const []) (uncurry (++) . (f >< id))
 		where f (a,l) = map (split (const a)  id) l
 
+discollect2 :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
+discollect2 = (>>= f) 
+		where f (a,l) = map (split (const a)  id) l
+
 dic_exp :: Dict -> [(String,[String])]
 dic_exp = collect . tar
 
@@ -1260,6 +1264,43 @@ janela = InWindow
 ----- defs auxiliares -------------
 
 put  = uncurry Translate 
+
+final = do
+	r <- l 2 2
+	display janela white r
+
+l2 :: Int -> Int -> IO Picture
+l2 i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generate2) >>= (return . pictures . zipWith id l)
+	where x = fromIntegral i
+	      y = fromIntegral j
+	      l = do { x' <- map (80 *) [0..x-1]; y' <- map (80 *) [0..y-1]; return(put(x',y'))}
+
+
+generate2 :: Int -> IO Picture
+generate2 0 = return truchet1;generate2 1 = return truchet2
+
+
+l :: Int -> Int -> IO Picture
+l i j =  (sequence $ replicate (i * j) $ ( (randomRIO(0,1)) >>= generate2)) >>= (associate3 (fromIntegral i) (fromIntegral j))  
+
+
+
+associate3 :: Float -> Float -> [Picture] -> IO Picture
+associate3 i j = return . pictures . zipWith id l
+	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(put(x,y))}
+
+
+associate2 :: Float -> Float -> [Picture] -> IO Picture
+associate2 i j a = return (pictures $ map (uncurry put) $ zipWith (curry id) l a)
+	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(x,y)}
+
+
+associate :: Float -> Float -> [a] -> IO [((Float,Float),a)]
+associate i j a = return (zipWith (curry id) l a)
+	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(x,y)}
+
+
+
 
 -------------------------------------------------
 \end{code}
