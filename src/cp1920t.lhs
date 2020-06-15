@@ -991,6 +991,10 @@ discollect = cataList g where
 	g = either (const []) (uncurry (++) . (f >< id))
 		where f (a,l) = map (split (const a)  id) l
 
+discollect2 :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
+discollect2 = (>>= f) 
+		where f (a,l) = map (split (const a)  id) l
+
 dic_exp :: Dict -> [(String,[String])]
 dic_exp = collect . tar
 
@@ -1091,7 +1095,7 @@ insOrd' = undefined
 insOrd a x = anaBTree f (Just a,x)
             where f (Nothing,Empty) = i1()
                   f (Just a,Empty) = i2(a,((Nothing,Empty),(Nothing,Empty)))
-                  f (Just a,Node (x,(t1,t2))) | a < x = i2(x,((Just a,t1),(Nothing,t2)))
+                  f (Just a,Node (x,(t1,t2))) | a <= x = i2(x,((Just a,t1),(Nothing,t2)))
                                               | otherwise = i2(x,((Nothing,t1),(Just a,t2)))
                   f (Nothing,Node (x,(t1,t2))) = i2(x,((Nothing,t1),(Nothing,t2)))
 
@@ -1104,16 +1108,29 @@ isOrd' = cataBTree g
 isOrd = p1 . cataBTree g 
       where g = either (const (True,Empty)) (split (f2 (funcaoComparacao . Node)) (Node . f))
             f = (id >< (p2 >< p2)) --(a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)
-            f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c)
+            f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c) 
+	    funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
 
-funcaoComparacao :: (Ord a) => BTree a -> Bool 		
-funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((< a).p1) (outBTree t1)) && (either (const True) ((> a).p1) (outBTree t2))
 
-rrot = undefined
 
-lrot = undefined
+rrot Empty = Empty
+rrot t@(Node (a,(Empty,d))) = t
+rrot (Node (black,((Node (red,(purple,green))),blue))) = Node(red,(purple,(Node (black,(green,blue)))))
 
-splay l t =  undefined
+
+lrot Empty = Empty
+lrot t@(Node (a,(e,Empty))) = t
+lrot (Node (black,(blue,(Node (red,(green,purple)))))) = Node(red,((Node (black,(blue,green)),purple)))
+
+
+
+
+splay = cataList g
+	where g = either (const id) f
+	      f(True,l) = rrot . l   
+              f(False,l) = lrot . l
+{-            f _ Empty = Empty
+	      f (b1,b2) (Node (a,(t1,t2))) = if b1 then b2 t1 else b2 t2-}
   
 \end{code}
 
@@ -1189,7 +1206,7 @@ y = Node(True, (Node(True,(Empty,Empty)),Empty))
 
 outNode (Node(a,(b,c))) = (a,(b,c))
 
-bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
+bnavLTree = undefined--cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
 
 bnavLTreePointWise = cataLTree g
   where g = either (\a _ -> Leaf a) f where
@@ -1252,6 +1269,43 @@ janela = InWindow
 testHenrique = Pictures [Translate 0.0 0.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 0.0 80.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 80.0 0.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)]),Translate 80.0 80.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)])]
 
 put  = uncurry Translate 
+
+final = do
+	r <- l 2 2
+	display janela white r
+
+l2 :: Int -> Int -> IO Picture
+l2 i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generate2) >>= (return . pictures . zipWith id l)
+	where x = fromIntegral i
+	      y = fromIntegral j
+	      l = do { x' <- map (80 *) [0..x-1]; y' <- map (80 *) [0..y-1]; return(put(x',y'))}
+
+
+generate2 :: Int -> IO Picture
+generate2 0 = return truchet1;generate2 1 = return truchet2
+
+
+l :: Int -> Int -> IO Picture
+l i j =  (sequence $ replicate (i * j) $ ( (randomRIO(0,1)) >>= generate2)) >>= (associate3 (fromIntegral i) (fromIntegral j))  
+
+
+
+associate3 :: Float -> Float -> [Picture] -> IO Picture
+associate3 i j = return . pictures . zipWith id l
+	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(put(x,y))}
+
+
+associate2 :: Float -> Float -> [Picture] -> IO Picture
+associate2 i j a = return (pictures $ map (uncurry put) $ zipWith (curry id) l a)
+	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(x,y)}
+
+
+associate :: Float -> Float -> [a] -> IO [((Float,Float),a)]
+associate i j a = return (zipWith (curry id) l a)
+	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(x,y)}
+
+
+
 
 -------------------------------------------------
 \end{code}
