@@ -1128,13 +1128,13 @@ outBdt:: Bdt a -> Either a (String,(Bdt a, Bdt a))
 outBdt (Dec a)  = i1 a
 outBdt (Query(s,(b1,b2))) = i2 (s,(b1,b2)) 
 
-baseBdt f g h = f -|- (g >< ( h >< h ))  -- bifunctor
+baseBdt f g = id -|- (f >< ( g >< g ))  
 
-recBdt f = id -|- (id >< (f >< f ))       -- F f = B(id,id,f) -- lei 47
+recBdt f = id -|- (id >< (f >< f )) 
 
-cataBdt g = g . (recBdt (cataBdt g)) . outBdt -- (| g |) = g . F (|g|) . out -l lei  44 + iso in/out
+cataBdt g = g . (recBdt (cataBdt g)) . outBdt
 
-anaBdt g = inBdt . (recBdt (anaBdt g)) . g  -- [(g)] = in . F[(g)] . g -- lei 53 + iso in/out
+anaBdt g = inBdt . (recBdt (anaBdt g)) . g 
 \end{code}
 
 \begin{eqnarray*}
@@ -1170,15 +1170,13 @@ extLTree = cataBdt g where
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
 
+
 navLTreePointWise :: LTree a -> ([Bool] -> LTree a)
 navLTreePointWise = cataLTree g 
   where g = either (\a _ -> Leaf a) f where
             f (l, r) [] = Fork (l [], r [])
             f (l, r) (True:hs) = l hs
             f (l, r) (False: hs) = r hs
-
-
-
 
 \end{code}
 
@@ -1202,7 +1200,7 @@ bnavLTreePointWise = cataLTree g
 \end{code}
 
 \subsection*{pbnavLTree}
-UnfoldD é o Join da monad Dist. esta irá combinar as probabilidades resultantes das duas subárvores.
+UnfoldD é o Join da monad Dist. Esta irá combinar as probabilidades resultantes das duas subárvores.
 Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
 
 \begin{code}
@@ -1222,6 +1220,11 @@ arvoreDist= (Node ((D[(True,0.7),(False,0.3)]),((Node ((D[(True,0.6),(False,0.4)
 
 x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
 z = Node(D[(True,0.6),(False,0.4)],(Empty,Empty))
+
+anita = Query("2a feira?", (Query("chuva na ida", (Dec "precisa", Query("chuva no regresso?", (Dec "precisa", Dec "nao precisa")))), Dec "nao precisa"))
+testePaulo1 = extLTree anita
+
+btreePaulo = Node(D[(True, 0.8) , (False, 0.2)], (Empty, Empty))
 
 testProb (Leaf a) _ = D[(Leaf a,1)]
 testProb (Fork(t1,t2)) Empty = unfoldD (D [((testProb t1 Empty),0.5),((testProb t2 Empty),05)])
@@ -1245,6 +1248,8 @@ janela = InWindow
              (100,100)        -- window position
 
 ----- defs auxiliares -------------
+
+testHenrique = Pictures [Translate 0.0 0.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 0.0 80.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 80.0 0.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)]),Translate 80.0 80.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)])]
 
 put  = uncurry Translate 
 
