@@ -65,6 +65,7 @@
 %format LTree = "\mathsf{LTree}"
 %format inNat = "\mathsf{in}"
 %format (cataNat (g)) = "\cata{" g "}"
+%format (cataLTree (g)) = "\cata{" g "}"
 %format Nat0 = "\N_0"
 %format muB = "\mu "
 %format (frac (n)(m)) = "\frac{" n "}{" m "}"
@@ -86,7 +87,9 @@
 %format cdots = "\cdots "
 %format pi = "\pi "
 %format quadrado = "^2"
+%format (expn (a) (n)) = "{" a "}^{" n "}" 
 %format (anaBdt (g)) = "\ana{" g "}"
+%format joinMonad = "μ"
 
 %---------------------------------------------------------------------------
 
@@ -1002,23 +1005,12 @@ tar = cataExp g where
   g = either (singl . (split (const "") id)) (f)
   f (a,b) = map ((++) a >< id) (concat b) 
 
-
-
-{-dic_rd :: String -> Dict -> Maybe [String]
-dic_rd s d = while2 p loopBody exit (s,Just d)
-  where p(a,b) = (a /= [] && isJust b)
-        exit(_,Nothing) = Nothing
-              exit([], Just (Var x)) = Just [x]
-        exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
-          | otherwise = f l 
-          where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) -}
-
 dic_rd :: String -> Dict -> Maybe [String]
 dic_rd s d = while2 p loopBody exit (s,Just d)
   where p(a,b) = (a /= [] && isJust b)
         exit(_,Nothing) = Nothing
         exit([], Just (Var x)) = Just [x]
-        exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
+        exit ([],Just (Term o l)) 
           | otherwise = f l 
           where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) 
         
@@ -1181,58 +1173,106 @@ extLTree = cataBdt g where
 
 \subsection*{navLTree}
 
+Versão pointfree
 
 \begin{code}
 
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
+\end{code}
+Versão pointwise
 
-
+\begin{code}
 navLTreePointWise :: LTree a -> ([Bool] -> LTree a)
 navLTreePointWise = cataLTree g 
   where g = either (\a _ -> Leaf a) f where
             f (l, r) [] = Fork (l [], r [])
             f (l, r) (True:hs) = l hs
             f (l, r) (False: hs) = r hs
-
 \end{code}
 
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |LTree A|
+           \ar[d]_-{|cataLTree (g)|}
+           \ar[r]_-{|outLTree|}
+&
+    |A + (LTree A)quadrado|
+           \ar[d]^-{|id + (cataLTree (g))quadrado|}
+\\
+     |(expn ([Bool]) (LTree A))|
+&
+     |A + ((expn ([Bool]) (LTree A)))quadrado|
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 4}
-
+\subsection*{bnavLTree}
+Versão pointfree
 \begin{code}
 
 y = Node(True, (Node(True,(Empty,Empty)),Empty))
 
 outNode (Node(a,(b,c))) = (a,(b,c))
 
-bnavLTree = undefined--cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (Fork . split l r ) (Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode))))
+bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (g (l,r)) (h (l,r))))
+    where f = (const . Leaf)
+          g (l,r) = Fork . split l r
+          h (l,r) = Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode)
 
+\end{code}
+Versão pointwise
+\begin{code}
 bnavLTreePointWise = cataLTree g
   where g = either (\a _ -> Leaf a) f where
             f (l, r) Empty = Fork (l Empty, r Empty)
             f (l, r) (Node(True,(left,right))) = l left
             f (l, r) (Node(False,(left,right))) = r right
-
 \end{code}
 
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |LTree A|
+           \ar[d]_-{|cataLTree (g)|}
+           \ar[r]_-{|outLTree|}
+&
+    |A + (LTree A)quadrado|
+           \ar[d]^-{|id + (cataLTree (g))quadrado|}
+\\
+     |(expn ((BTree Bool)) (LTree A))|
+&
+     |A + ((expn ((BTree Bool)) (LTree A)))quadrado|
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
+
 \subsection*{pbnavLTree}
-UnfoldD é o Join da monad Dist. Esta irá combinar as probabilidades resultantes das duas subárvores.
-Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
+Esta função irá percorrer uma LTree representante de uma situação onde em que a decisão depende de vários 
+fatores que são testados sucessivamente. A probabilidade de ocorrência, ou não, de cada fator é representada por 
+\textbf{Dist Bool}. Devido à natureza sucessiva destes acontecimentos, as suas probabilidades estão organizadas numa
+\textbf{BTree (Dist Bool)}. Será essa BTree, em conjunto com a LTree, que será percorrida para dar resposta à probabilidade
+de cada uma das respostas.
 
 \begin{code}
 
+pbnavLTreeDist = cataLTree g
+  where g = either (\a _ -> D [(Leaf a,1)]) f where
+            f (l, r) Empty = D[(Fork(((extract (l Empty))!!0),((extract (r Empty))!!0)),1)];
+            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
+
+\end{code}
+Foi também desenvolvida uma função que se serve da maquinaria monádica para abstrair a monad, no caso de estarmos numa Leaf e 
+no caso em que a BTree é Empty. Esta revela-se mais intuitiva e tem a vantagem de não se estar a assumir o conteúdo de variáveis, 
+ao contrário do que acontece com extract, na função anterior. 
+
+\begin{code}
 pbnavLTree = cataLTree g
   where g = either (\a _ -> return (Leaf a)) f where
             f (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
             f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
+xxx (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
 
-
-pbnavLTreeDist = cataLTree g
-  where g = either (\a _ -> D [(Leaf a,1)]) f where
-            --f (l, r) Empty = unfoldD (D [(l Empty,0.5),(r Empty,0.5)])
-            f (l, r) Empty = D[(Fork(((extract (l Empty))!!0),((extract (r Empty))!!0)),1)];
-            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
 
 
 x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
@@ -1245,6 +1285,27 @@ btreePaulo = Node(D[(True, 0.8) , (False, 0.2)], (Empty, Empty))
 
 
 \end{code}
+
+O seguinte diagrama ilustra a o funcionamento do primeiro caso da função auxiliar f.
+\bigbreak
+Nota: unfoldD é a operação join/multiplicação da monad Dist.
+
+\begin{eqnarray*}
+\xymatrix@@C=4cm{
+    |Dist (Dist LTree A)|
+          \ar[d]_-{|unfoldD|}
+&
+    |Dist(LTree A)quadrado)|
+           \ar[l]_-{|T (return . Fork)|}
+           \ar[l_d]_-{| >>= return . Fork|}
+\\
+     |Dist (LTree A)|
+&
+     |(Ltree A)quadrado|
+           \ar[l]^{|return . Fork|}
+}
+\end{eqnarray*}
+
 
 \subsection*{Problema 5}
 
@@ -1273,14 +1334,8 @@ final = do
 
 generateMatrix :: Int -> Int -> IO Picture
 generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generateTruchet) >>= (return . pictures . zipWith id l)
-  where x = fromIntegral i
-        y = fromIntegral j
-        l = do { x' <- map (80 *) [0..x-1]; y' <- map (80 *) [0..y-1]; return(put(x',y'))}
-
-
-generateTruchet :: Int -> IO Picture
-generateTruchet 0 = return truchet1
-generateTruchet 1 = return truchet2
+  where l = do { x' <- map (80 *) [0..(fromIntegral i)-1]; y' <- map (80 *) [0..(fromIntegral j)-1]; return(put(x',y'))}
+        generateTruchet x = return . either (const truchet1) (const truchet2) $ outNat $ fromInteger x
 
 
 

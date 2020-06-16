@@ -276,17 +276,17 @@
 %---------------------------------------------------------------------------
 
 \title{
-       	    Cálculo de Programas
+             Cálculo de Programas
 \\
-       	Trabalho Prático
+         Trabalho Prático
 \\
-       	MiEI+LCC --- 2019/20
+         MiEI+LCC --- 2019/20
 }
 
 \author{
-       	\dium
+         \dium
 \\
-       	Universidade do Minho
+         Universidade do Minho
 }
 
 
@@ -845,8 +845,8 @@ efeitos especiais em progra\-mação. Por exemplo, a biblioteca \Probability\
 oferece um mónade para abordar problemas de probabilidades. Nesta biblioteca,
 o conceito de distribuição estatística é captado pelo tipo
 \begin{eqnarray}
-	\ensuremath{\mathbf{newtype}\;\fun{Dist}\;\Varid{a}\mathrel{=}\Conid{D}\;\{\mskip1.5mu \Varid{unD}\mathbin{::}[\mskip1.5mu (\Varid{a},\Conid{ProbRep})\mskip1.5mu]\mskip1.5mu\}}
-	\label{eq:Dist}
+  \ensuremath{\mathbf{newtype}\;\fun{Dist}\;\Varid{a}\mathrel{=}\Conid{D}\;\{\mskip1.5mu \Varid{unD}\mathbin{::}[\mskip1.5mu (\Varid{a},\Conid{ProbRep})\mskip1.5mu]\mskip1.5mu\}}
+  \label{eq:Dist}
 \end{eqnarray}
 em que \ensuremath{\Conid{ProbRep}} é um real de \ensuremath{\mathrm{0}} a \ensuremath{\mathrm{1}}, equivalente a uma escala de $0$ a
 $100 \%$.
@@ -1033,7 +1033,7 @@ No anexo \ref{sec:codigo} é dada uma implementação da operação de permuta a
 Estudar o texto fonte deste trabalho para obter o efeito:\footnote{Exemplos tirados de \cite{Ol18}.} 
 \begin{eqnarray*}
 \start
-	\ensuremath{\Varid{id}\mathrel{=}\conj{\Varid{f}}{\Varid{g}}}
+  \ensuremath{\Varid{id}\mathrel{=}\conj{\Varid{f}}{\Varid{g}}}
 %
 \just\equiv{ universal property }
 %
@@ -1372,10 +1372,61 @@ outras funções auxiliares que sejam necessárias.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{11}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{14}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{26}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{29}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{35}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{38}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{43}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{55}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{81}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{109}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{data}\;\Conid{XNat}\;\Varid{a}\mathrel{=}\Conid{Zero}\;\Varid{a}\mid \Conid{Succ}\;(\Conid{XNat}\;\Varid{a})\;\mathbf{deriving}\;\Conid{Show}{}\<[E]%
+\\
+\>[B]{}\Varid{inXNat}\mathrel{=}\alt{\Conid{Zero}}{\Conid{Succ}}{}\<[E]%
+\\
+\>[B]{}\Varid{outXNat}\;(\Conid{Zero}\;\Varid{a})\mathrel{=}i_1\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{outXNat}\;(\Conid{Succ}\;\Varid{n})\mathrel{=}i_2\;\Varid{n}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{baseXNat}\;\Varid{f}\;\Varid{g}\mathrel{=}\Varid{f}+\Varid{g}{}\<[E]%
+\\
+\>[B]{}\Varid{recXNat}\;\Varid{f}\mathrel{=}\Varid{baseXNat}\;\Varid{id}\;\Varid{f}{}\<[E]%
+\\
+\>[B]{}\Varid{cataXNat}\;\Varid{a}\mathrel{=}\Varid{a}\comp (\Varid{recXNat}\;(\Varid{cataXNat}\;\Varid{a}))\comp \Varid{outXNat}{}\<[E]%
+\\
+\>[B]{}\Varid{anaXNat}\;\Varid{f}\mathrel{=}\Varid{inXNat}\comp (\Varid{recXNat}\;(\Varid{anaXNat}\;\Varid{f}))\comp \Varid{f}{}\<[E]%
+\\
+\>[B]{}\Varid{hyloXNat}\;\Varid{a}\;\Varid{c}\mathrel{=}\Varid{cataXNat}\;\Varid{a}\comp \Varid{anaXNat}\;\Varid{c}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{codiag}\mathrel{=}\alt{\Varid{id}}{\Varid{id}}{}\<[E]%
+\\
+\>[B]{}\Varid{tailr}\mathrel{=}\Varid{hyloXNat}\;\Varid{codiag}{}\<[E]%
+\\
+\>[B]{}\Varid{while2}\;\Varid{p}\;\Varid{f}\;\Varid{g}\mathrel{=}\Varid{tailr}\;((\Varid{g}+\Varid{f})\comp \Varid{grd}\;(\neg \comp \Varid{p})){}\<[E]%
+\\[\blanklineskip]%
 \>[B]{}\Varid{discollect}\mathbin{::}(\Conid{Ord}\;\Varid{b},\Conid{Ord}\;\Varid{a})\Rightarrow [\mskip1.5mu (\Varid{b},[\mskip1.5mu \Varid{a}\mskip1.5mu])\mskip1.5mu]\to [\mskip1.5mu (\Varid{b},\Varid{a})\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{discollect}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{discollect}\mathrel{=}\Varid{cataList}\;\Varid{g}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{g}\mathrel{=}\alt{\underline{[\mskip1.5mu \mskip1.5mu]}}{\uncurry{(\plus )}\comp (\Varid{f}\times\Varid{id})}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\mathbf{where}\;\Varid{f}\;(\Varid{a},\Varid{l})\mathrel{=}\map \;\conj{\underline{\Varid{a}}}{{}\<[43]%
+\>[43]{}\Varid{id}}\;\Varid{l}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{discollect2}\mathbin{::}(\Conid{Ord}\;\Varid{b},\Conid{Ord}\;\Varid{a})\Rightarrow [\mskip1.5mu (\Varid{b},[\mskip1.5mu \Varid{a}\mskip1.5mu])\mskip1.5mu]\to [\mskip1.5mu (\Varid{b},\Varid{a})\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{discollect2}\mathrel{=}(\bind \Varid{f}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathbf{where}\;\Varid{f}\;(\Varid{a},\Varid{l})\mathrel{=}\map \;\conj{\underline{\Varid{a}}}{{}\<[43]%
+\>[43]{}\Varid{id}}\;\Varid{l}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{dic\char95 exp}\mathbin{::}\Conid{Dict}\to [\mskip1.5mu (\Conid{String},[\mskip1.5mu \Conid{String}\mskip1.5mu])\mskip1.5mu]{}\<[E]%
 \\
@@ -1384,11 +1435,110 @@ outras funções auxiliares que sejam necessárias.
 \>[B]{}\Varid{tar}\mathrel{=}\Varid{cataExp}\;\Varid{g}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\Varid{g}\mathrel{=}\alt{\Varid{singl}\comp \conj{\underline{\text{\ttfamily \char34 \char34}}}{\Varid{id}}}{\Varid{f}}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{f}\;(\Varid{a},\Varid{b})\mathrel{=}\map \;((\plus )\;\Varid{a}\times\Varid{id})\;(\Varid{concat}\;\Varid{b}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{dic\char95 rd}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{dic\char95 rd}\mathbin{::}\Conid{String}\to \Conid{Dict}\to \Conid{Maybe}\;[\mskip1.5mu \Conid{String}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{dic\char95 rd}\;\Varid{s}\;\Varid{d}\mathrel{=}\Varid{while2}\;\Varid{p}\;\Varid{loopBody}\;\Varid{exit}\;(\Varid{s},\Conid{Just}\;\Varid{d}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{p}\;(\Varid{a},\Varid{b})\mathrel{=}(\Varid{a}\not\equiv [\mskip1.5mu \mskip1.5mu]\mathrel{\wedge}\Varid{isJust}\;\Varid{b}){}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{exit}\;(\anonymous ,\Conid{Nothing})\mathrel{=}\Conid{Nothing}{}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{exit}\;([\mskip1.5mu \mskip1.5mu],\Conid{Just}\;(\Conid{Var}\;\Varid{x}))\mathrel{=}\Conid{Just}\;[\mskip1.5mu \Varid{x}\mskip1.5mu]{}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{exit}\;([\mskip1.5mu \mskip1.5mu],\Conid{Just}\;(\Conid{Term}\;\Varid{o}\;\Varid{l})){}\<[E]%
+\\
+\>[9]{}\hsindent{2}{}\<[11]%
+\>[11]{}\mid \Varid{otherwise}\mathrel{=}\Varid{f}\;\Varid{l}{}\<[E]%
+\\
+\>[9]{}\hsindent{2}{}\<[11]%
+\>[11]{}\mathbf{where}\;\Varid{f}\mathrel{=}\alt{\Varid{nothing}}{\Conid{Just}\comp \Varid{cons}}\comp \Varid{outList}\comp \map \;\alt{\Varid{id}}{\p1}\comp \Varid{filter}\;(\Varid{isLeft})\comp \map \;(\Varid{outExp}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{dic\char95 in}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{loopBody}\;(\Varid{s},\Conid{Just}\;(\Conid{Var}\;\Varid{v}))\mathrel{=}(\Varid{s},\Conid{Nothing}){}\<[E]%
+\\
+\>[B]{}\Varid{loopBody}\;(\Varid{s},\Conid{Just}\;(\Conid{Term}\;\Varid{o}\;\Varid{l}))\mid (\Varid{o}\equiv [\mskip1.5mu \mskip1.5mu])\mathrel{=}(\Varid{s},\Varid{termLsearch}\;\Varid{s}\;\Varid{l}){}\<[E]%
+\\
+\>[B]{}\hsindent{29}{}\<[29]%
+\>[29]{}\mid (\Varid{head}\;\Varid{s}\equiv \Varid{head}\;\Varid{o})\mathrel{=}(\Varid{tail}\;\Varid{s},\Conid{Just}\;(\Conid{Term}\;\Varid{o}\;\Varid{l})){}\<[E]%
+\\
+\>[B]{}\hsindent{29}{}\<[29]%
+\>[29]{}\mid \Varid{otherwise}\mathrel{=}(\Varid{s},\Varid{termLsearch}\;\Varid{s}\;\Varid{l}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{termLsearch}\;\Varid{s}\;((\Conid{Term}\;\Varid{o}\;\Varid{l})\mathbin{:}\Varid{xs})\mathrel{=}\mathbf{if}\;(\Varid{head}\;\Varid{s}\equiv \Varid{head}\;\Varid{o})\;\mathbf{then}\;\Conid{Just}\;(\Conid{Term}\;\Varid{o}\;\Varid{l})\;\mathbf{else}\;\Varid{termLsearch}\;\Varid{s}\;\Varid{xs}{}\<[E]%
+\\
+\>[B]{}\Varid{termLsearch}\;\Varid{s}\;(\anonymous \mathbin{:}\Varid{xs})\mathrel{=}\Varid{termLsearch}\;\Varid{s}\;\Varid{xs}{}\<[E]%
+\\
+\>[B]{}\Varid{termLsearch}\;\anonymous \;[\mskip1.5mu \mskip1.5mu]\mathrel{=}\Conid{Nothing}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{isJust}\;(\Conid{Just}\;\anonymous )\mathrel{=}\Conid{True}{}\<[E]%
+\\
+\>[B]{}\Varid{isJust}\;\anonymous \mathrel{=}\Conid{False}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{isLeft}\;(i_1\;\anonymous )\mathrel{=}\Conid{True}{}\<[E]%
+\\
+\>[B]{}\Varid{isLeft}\;\anonymous \mathrel{=}\Conid{False}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{dic\char95 in}\mathbin{::}\Conid{String}\to \Conid{String}\to \Conid{Dict}\to \Conid{Dict}{}\<[E]%
+\\
+\>[B]{}\Varid{dic\char95 in}\;\Varid{p}\;\Varid{t}\;\Varid{d}\mathrel{=}\Varid{dic\char95 in\char95 aux}\;(\Conid{Just}\;(\Varid{traductionToDict}\;(\Varid{p},\Varid{t})),\Varid{d}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{dic\char95 in\char95 aux}\mathbin{::}(\Conid{Maybe}\;(\Conid{Dict}),\Conid{Dict})\to \Conid{Dict}{}\<[E]%
+\\
+\>[B]{}\Varid{dic\char95 in\char95 aux}\mathrel{=}\Varid{anaExp}\;\Varid{g}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{g}\;(\anonymous ,\Conid{Var}\;\Varid{v})\mathrel{=}i_1\;(\Varid{v}){}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{g}\;(\Conid{Just}\;(\Conid{Term}\;\Varid{a}\;\Varid{b}),\Conid{Term}\;\Varid{o}\;\Varid{l}){}\<[38]%
+\>[38]{}\mid (\Varid{o}\equiv [\mskip1.5mu \mskip1.5mu]\mathrel{\vee}\Varid{o}\equiv \text{\ttfamily \char34 ~\char34})\mathrel{=}\Varid{recExp}\;\conj{\underline{(\Conid{Just}\;(\Conid{Term}\;\Varid{a}\;\Varid{b}))}}{\Varid{id}}\;{}\<[109]%
+\>[109]{}(\Varid{outExp}\;(\Conid{Term}\;\Varid{o}\;(\Varid{insertIfAbsent}\;(\Conid{Term}\;\Varid{a}\;\Varid{b},\Varid{l})))){}\<[E]%
+\\
+\>[9]{}\hsindent{5}{}\<[14]%
+\>[14]{}\mid (\Varid{head}\;\Varid{o}\equiv \Varid{head}\;\Varid{a})\mathrel{=}{}\<[38]%
+\>[38]{}\Varid{recExp}\;\conj{\underline{(\Conid{Just}\;(\Varid{head}\;\Varid{b}))}}{\Varid{id}}\;{}\<[81]%
+\>[81]{}(\Varid{outExp}\;(\Conid{Term}\;\Varid{o}\;(\Varid{insertIfAbsent}\;(\Varid{head}\;\Varid{b},\Varid{l})))){}\<[E]%
+\\
+\>[9]{}\hsindent{5}{}\<[14]%
+\>[14]{}\mid \Varid{otherwise}\mathrel{=}\Varid{recExp}\;\conj{\Varid{nothing}}{\Varid{id}}\;{}\<[55]%
+\>[55]{}(\Varid{outExp}\;(\Conid{Term}\;\Varid{o}\;\Varid{l})){}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{g}\;(\Conid{Nothing},\Varid{v})\mathrel{=}{}\<[26]%
+\>[26]{}\Varid{recExp}\;\conj{\Varid{nothing}}{\Varid{id}}\;(\Varid{outExp}\;\Varid{v}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mbox{\commentbegin 
+insertIfPresent :: (Dict,[Dict]) -> [Dict]
+insertIfPresent = hyloSList f g
+  where g (Term a b, ((Term o l):ds)) \ensuremath{(\Varid{head}\;\Varid{a}\equiv \Varid{head}\;\Varid{o})\mathrel{=}i_1\;((\Conid{Term}\;\Varid{o}\;\Varid{l})\mathbin{:}\Varid{ds})} otherwise = i2(Term o l, (Term a b, ds))
+        g (l, (Var x):ds) = i2 (Var x, (l,ds))
+        g (l,[]) = i1(singl l)
+        f = either id cons \commentend}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{insertIfAbsent}\;((\Conid{Term}\;\Varid{o}\;\Varid{l}),((\Conid{Term}\;\Varid{a}\;\Varid{b})\mathbin{:}\Varid{ts}))\mathrel{=}\mathbf{if}\;(\Varid{head}\;\Varid{o}\equiv \Varid{head}\;\Varid{a})\;\mathbf{then}\;((\Conid{Term}\;\Varid{a}\;\Varid{b})\mathbin{:}\Varid{ts})\;\mathbf{else}\;(\Conid{Term}\;\Varid{a}\;\Varid{b})\mathbin{:}(\Varid{insertIfAbsent}\;((\Conid{Term}\;\Varid{o}\;\Varid{l}),\Varid{ts})){}\<[E]%
+\\
+\>[B]{}\Varid{insertIfAbsent}\;((\Conid{Term}\;\Varid{o}\;\Varid{l}),[\mskip1.5mu \mskip1.5mu])\mathrel{=}{}\<[35]%
+\>[35]{}[\mskip1.5mu (\Conid{Term}\;\Varid{o}\;\Varid{l})\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{insertIfAbsent}\;(\Varid{l},(\Varid{t}\mathbin{:}\Varid{ts}))\mathrel{=}\Varid{t}\mathbin{:}(\Varid{insertIfAbsent}\;(\Varid{l},\Varid{ts})){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{traductionToDict}\mathbin{::}(\Conid{String},\Conid{String})\to \Conid{Dict}{}\<[E]%
+\\
+\>[B]{}\Varid{traductionToDict}\mathrel{=}\Varid{anaExp}\;\Varid{g}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{g}\;([\mskip1.5mu \mskip1.5mu],\Varid{t})\mathrel{=}i_1\;(\Varid{t});{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{g}\;(\Varid{p}\mathbin{:}\Varid{ps},\Varid{t})\mathrel{=}i_2\;(\Varid{singl}\;\Varid{p},\Varid{singl}\;(\Varid{ps},\Varid{t})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1397,38 +1547,101 @@ outras funções auxiliares que sejam necessárias.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{14}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{7}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{12}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{18}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{19}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{47}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{maisDir}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{\Conid{Nothing}}}{\Varid{f}}{}\<[E]%
+\\
+\>[3]{}\hsindent{9}{}\<[12]%
+\>[12]{}\mathbf{where}\;\Varid{f}\;(\Varid{a},(\Varid{t1},\Conid{Nothing}))\mathrel{=}\Conid{Just}\;\Varid{a}{}\<[E]%
+\\
+\>[12]{}\hsindent{6}{}\<[18]%
+\>[18]{}\Varid{f}\;(\Varid{a},(\Varid{t1},\Varid{t2}))\mathrel{=}\Varid{t2}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{maisEsq}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{insOrd'}\;\Varid{x}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{\Conid{Nothing}}}{\Varid{f}}{}\<[E]%
 \\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\mathbf{where}\;\Varid{f}\;(\Varid{a},(\Conid{Nothing},\Varid{t2}))\mathrel{=}\Conid{Just}\;\Varid{a}{}\<[E]%
+\\
+\>[13]{}\hsindent{6}{}\<[19]%
+\>[19]{}\Varid{f}\;(\Varid{a},(\Varid{t1},\Varid{t2}))\mathrel{=}\Varid{t1}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{insOrd}\;\Varid{a}\;\Varid{x}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{insOrd'}\mathrel{=}\bot {}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{insOrd}\;\Varid{a}\;\Varid{x}\mathrel{=}\Varid{anaBTree}\;\Varid{f}\;(\Conid{Just}\;\Varid{a},\Varid{x}){}\<[E]%
+\\
+\>[B]{}\hsindent{13}{}\<[13]%
+\>[13]{}\mathbf{where}\;\Varid{f}\;(\Conid{Nothing},\Conid{Empty})\mathrel{=}i_1\;(){}\<[E]%
+\\
+\>[13]{}\hsindent{6}{}\<[19]%
+\>[19]{}\Varid{f}\;(\Conid{Just}\;\Varid{a},\Conid{Empty})\mathrel{=}i_2\;(\Varid{a},((\Conid{Nothing},\Conid{Empty}),(\Conid{Nothing},\Conid{Empty}))){}\<[E]%
+\\
+\>[13]{}\hsindent{6}{}\<[19]%
+\>[19]{}\Varid{f}\;(\Conid{Just}\;\Varid{a},\Conid{Node}\;(\Varid{x},(\Varid{t1},\Varid{t2})))\mid \Varid{a}\leq \Varid{x}\mathrel{=}i_2\;(\Varid{x},((\Conid{Just}\;\Varid{a},\Varid{t1}),(\Conid{Nothing},\Varid{t2}))){}\<[E]%
+\\
+\>[19]{}\hsindent{28}{}\<[47]%
+\>[47]{}\mid \Varid{otherwise}\mathrel{=}i_2\;(\Varid{x},((\Conid{Nothing},\Varid{t1}),(\Conid{Just}\;\Varid{a},\Varid{t2}))){}\<[E]%
+\\
+\>[13]{}\hsindent{6}{}\<[19]%
+\>[19]{}\Varid{f}\;(\Conid{Nothing},\Conid{Node}\;(\Varid{x},(\Varid{t1},\Varid{t2})))\mathrel{=}i_2\;(\Varid{x},((\Conid{Nothing},\Varid{t1}),(\Conid{Nothing},\Varid{t2}))){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{isOrd'}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{isOrd}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\mbox{\onelinecomment isOrd ::  (Ord a) => BTree a -> Bool}{}\<[E]%
+\\
+\>[B]{}\Varid{isOrd}\mathrel{=}\p1\comp \Varid{cataBTree}\;\Varid{g}{}\<[E]%
+\\
+\>[B]{}\hsindent{7}{}\<[7]%
+\>[7]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{(\Conid{True},\Conid{Empty})}}{\conj{\Varid{f2}\;(\Varid{funcaoComparacao}\comp \Conid{Node})}{\Conid{Node}\comp \Varid{f}}}{}\<[E]%
+\\
+\>[7]{}\hsindent{6}{}\<[13]%
+\>[13]{}\Varid{f}\mathrel{=}(\Varid{id}\times(\p2\times\p2))\mbox{\onelinecomment (a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)}{}\<[E]%
+\\
+\>[7]{}\hsindent{6}{}\<[13]%
+\>[13]{}\Varid{f2}\;\Varid{p}\;(\Varid{a},(\Varid{b},\Varid{c}))\mathrel{=}\Varid{p}\;(\Varid{f}\;(\Varid{a},(\Varid{b},\Varid{c})))\mathrel{\wedge}\p1\;(\Varid{b})\mathrel{\wedge}\p1\;(\Varid{c}){}\<[E]%
+\\
+\>[7]{}\hsindent{6}{}\<[13]%
+\>[13]{}\Varid{funcaoComparacao}\;(\Conid{Node}\;(\Varid{a},(\Varid{t1},\Varid{t2})))\mathrel{=}\alt{\underline{\Conid{True}}}{(\leq \Varid{a})\comp \p1}\;(\Varid{outBTree}\;\Varid{t1})\mathrel{\wedge}\alt{\underline{\Conid{True}}}{(\geq \Varid{a})\comp \p1}\;(\Varid{outBTree}\;\Varid{t2}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{rrot}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{rrot}\;\Conid{Empty}\mathrel{=}\Conid{Empty}{}\<[E]%
+\\
+\>[B]{}\Varid{rrot}\;\Varid{t}\mathord{@}(\Conid{Node}\;(\Varid{a},(\Conid{Empty},\Varid{d})))\mathrel{=}\Varid{t}{}\<[E]%
+\\
+\>[B]{}\Varid{rrot}\;(\Conid{Node}\;(\Varid{black},((\Conid{Node}\;(\Varid{red},(\Varid{purple},\Varid{green}))),\Varid{blue})))\mathrel{=}\Conid{Node}\;(\Varid{red},(\Varid{purple},(\Conid{Node}\;(\Varid{black},(\Varid{green},\Varid{blue}))))){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{lrot}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{lrot}\;\Conid{Empty}\mathrel{=}\Conid{Empty}{}\<[E]%
+\\
+\>[B]{}\Varid{lrot}\;\Varid{t}\mathord{@}(\Conid{Node}\;(\Varid{a},(\Varid{e},\Conid{Empty})))\mathrel{=}\Varid{t}{}\<[E]%
+\\
+\>[B]{}\Varid{lrot}\;(\Conid{Node}\;(\Varid{black},(\Varid{blue},(\Conid{Node}\;(\Varid{red},(\Varid{green},\Varid{purple}))))))\mathrel{=}\Conid{Node}\;(\Varid{red},((\Conid{Node}\;(\Varid{black},(\Varid{blue},\Varid{green})),\Varid{purple}))){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{splay}\;\Varid{l}\;\Varid{t}\mathrel{=}{}\<[14]%
-\>[14]{}\bot {}\<[E]%
+\>[B]{}\Varid{splay}\mathrel{=}\Varid{cataList}\;\Varid{g}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{\Varid{id}}}{\Varid{f}}{}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{f}\;(\Conid{True},\Varid{l})\mathrel{=}\Varid{rrot}\comp \Varid{l}{}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{f}\;(\Conid{False},\Varid{l})\mathrel{=}\Varid{lrot}\comp \Varid{l}{}\<[E]%
+\\
+\>[B]{}\mbox{\commentbegin             f _ Empty = Empty
+        f (b1,b2) (Node (a,(t1,t2))) = if b1 then b2 t1 else b2 t2 \commentend}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1437,9 +1650,6 @@ outras funções auxiliares que sejam necessárias.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{17}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{42}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{43}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{45}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{inBdt}\mathbin{::}\Varid{a}+(\Conid{String},(\Conid{Bdt}\;\Varid{a},\Conid{Bdt}\;\Varid{a}))\to \Conid{Bdt}\;\Varid{a}{}\<[E]%
 \\
@@ -1452,16 +1662,13 @@ outras funções auxiliares que sejam necessárias.
 \\
 \>[B]{}\Varid{outBdt}\;(\Conid{Query}\;(\Varid{s},(\Varid{b1},\Varid{b2})))\mathrel{=}i_2\;(\Varid{s},(\Varid{b1},\Varid{b2})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{baseBdt}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\Varid{f}+(\Varid{g}\times(\Varid{h}\times\Varid{h})){}\<[42]%
-\>[42]{}\mbox{\onelinecomment  bifunctor}{}\<[E]%
+\>[B]{}\Varid{baseBdt}\;\Varid{f}\;\Varid{g}\mathrel{=}\Varid{id}+(\Varid{f}\times(\Varid{g}\times\Varid{g})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{recBdt}\;\Varid{f}\mathrel{=}\Varid{id}+(\Varid{id}\times(\Varid{f}\times\Varid{f})){}\<[43]%
-\>[43]{}\mbox{\onelinecomment  F f = B(id,id,f) -- lei 47}{}\<[E]%
+\>[B]{}\Varid{recBdt}\;\Varid{f}\mathrel{=}\Varid{id}+(\Varid{id}\times(\Varid{f}\times\Varid{f})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{cataBdt}\;\Varid{g}\mathrel{=}\Varid{g}\comp (\Varid{recBdt}\;(\Varid{cataBdt}\;\Varid{g}))\comp \Varid{outBdt}\mbox{\onelinecomment  (\ensuremath{\Varid{g}}) = g . F (\ensuremath{\Varid{g}}) . out -l lei  44 + iso in/out}{}\<[E]%
+\>[B]{}\Varid{cataBdt}\;\Varid{g}\mathrel{=}\Varid{g}\comp (\Varid{recBdt}\;(\Varid{cataBdt}\;\Varid{g}))\comp \Varid{outBdt}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\ana{\Varid{g}}\mathrel{=}\Varid{inBdt}\comp (\Varid{recBdt}\;\ana{\Varid{g}})\comp \Varid{g}{}\<[45]%
-\>[45]{}\mbox{\onelinecomment  [(g)] = in . F[(g)] . g -- lei 53 + iso in/out}{}\<[E]%
+\>[B]{}\ana{\Varid{g}}\mathrel{=}\Varid{inBdt}\comp (\Varid{recBdt}\;\ana{\Varid{g}})\comp \Varid{g}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1481,7 +1688,7 @@ outras funções auxiliares que sejam necessárias.
 }
 \end{eqnarray*}
 \subsection*{extLTree}
-A diferença entre as duas estruturas é a presença da String nos nodos, dado que irá ser removido na transformação para LTree
+A diferença em termos estruturais entre os dois tipos de dados é a presença da String nos nodos, informação que irá ser removida na transformação para LTree
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -1497,19 +1704,26 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 
 \subsection*{navLTree}
 
+Versão pointfree
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{navLTree}\mathrel{=}\cata{\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;\Varid{null}\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;\Varid{head}\;(\Varid{l}\comp \Varid{tail})\;(\Varid{r}\comp \Varid{tail}))}}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Versão pointwise
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
-\\
-\>[B]{}\Varid{navLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;\Varid{null}\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;\Varid{head}\;(\Varid{l}\comp \Varid{tail})\;(\Varid{r}\comp \Varid{tail}))}{}\<[E]%
-\\[\blanklineskip]%
 \>[B]{}\Varid{navLTreePointWise}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
 \\
-\>[B]{}\Varid{navLTreePointWise}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{navLTreePointWise}\mathrel{=}\cata{\Varid{g}}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
@@ -1525,21 +1739,53 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \ColumnHook
 \end{hscode}\resethooks
 
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\mathsf{LTree}\;\Conid{A}}
+           \ar[d]_-{\ensuremath{\cata{\Varid{g}}}}
+           \ar[r]_-{\ensuremath{\Varid{outLTree}}}
+&
+    \ensuremath{\Conid{A}\mathbin{+}(\mathsf{LTree}\;\Conid{A})\;^2}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\cata{\Varid{g}}\;^2}}
+\\
+     \ensuremath{{[\mskip1.5mu \Conid{Bool}\mskip1.5mu]}^{\mathsf{LTree}\;\Conid{A}}}
+&
+     \ensuremath{\Conid{A}\mathbin{+}({[\mskip1.5mu \Conid{Bool}\mskip1.5mu]}^{\mathsf{LTree}\;\Conid{A}})\;^2}
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 4}
-
+\subsection*{bnavLTree}
+Versão pointfree
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{11}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{y}\mathrel{=}\Conid{Node}\;(\Conid{True},(\Conid{Node}\;(\Conid{True},(\Conid{Empty},\Conid{Empty})),\Conid{Empty})){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{outNode}\;(\Conid{Node}\;(\Varid{a},(\Varid{b},\Varid{c})))\mathrel{=}(\Varid{a},(\Varid{b},\Varid{c})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{bnavLTree}\mathrel{=}\Varid{cataLTree}\;\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;(\Conid{Empty}\equiv )\;(\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}})\;(\Varid{\Conid{Cp}.cond}\;(\p1\comp \Varid{outNode})\;(\Varid{l}\comp \p1\comp \p2\comp \Varid{outNode})\;(\Varid{r}\comp \p2\comp \p2\comp \Varid{outNode}))}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{bnavLTreePointWise}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{bnavLTree}\mathrel{=}\cata{\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;(\Conid{Empty}\equiv )\;(\Varid{g}\;(\Varid{l},\Varid{r}))\;(\Varid{h}\;(\Varid{l},\Varid{r}))}}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathbf{where}\;\Varid{f}\mathrel{=}(\underline{\cdot }\comp \Conid{Leaf}){}\<[E]%
+\\
+\>[5]{}\hsindent{6}{}\<[11]%
+\>[11]{}\Varid{g}\;(\Varid{l},\Varid{r})\mathrel{=}\Conid{Fork}\comp \conj{\Varid{l}}{\Varid{r}}{}\<[E]%
+\\
+\>[5]{}\hsindent{6}{}\<[11]%
+\>[11]{}\Varid{h}\;(\Varid{l},\Varid{r})\mathrel{=}\Varid{\Conid{Cp}.cond}\;(\p1\comp \Varid{outNode})\;(\Varid{l}\comp \p1\comp \p2\comp \Varid{outNode})\;(\Varid{r}\comp \p2\comp \p2\comp \Varid{outNode}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Versão pointwise
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{bnavLTreePointWise}\mathrel{=}\cata{\Varid{g}}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{Leaf}\;\Varid{a}}{\Varid{f}}\;\mathbf{where}{}\<[E]%
@@ -1555,46 +1801,110 @@ A diferença entre as duas estruturas é a presença da String nos nodos, dado q
 \ColumnHook
 \end{hscode}\resethooks
 
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\mathsf{LTree}\;\Conid{A}}
+           \ar[d]_-{\ensuremath{\cata{\Varid{g}}}}
+           \ar[r]_-{\ensuremath{\Varid{outLTree}}}
+&
+    \ensuremath{\Conid{A}\mathbin{+}(\mathsf{LTree}\;\Conid{A})\;^2}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\cata{\Varid{g}}\;^2}}
+\\
+     \ensuremath{{(\fun{BTree} \;\Conid{Bool})}^{\mathsf{LTree}\;\Conid{A}}}
+&
+     \ensuremath{\Conid{A}\mathbin{+}({(\fun{BTree} \;\Conid{Bool})}^{\mathsf{LTree}\;\Conid{A}})\;^2}
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
+
 \subsection*{pbnavLTree}
-UnfoldD é o Join da monad Dist. esta irá combinar as probabilidades resultantes das duas subárvores.
-Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá uma Dist tendo em conta as probabilidades de seguir cada ramo.
+Esta função irá percorrer uma LTree representante de uma situação onde em que a decisão depende de vários 
+fatores que são testados sucessivamente. A probabilidade de ocorrência, ou não, de cada fator é representada por 
+\textbf{Dist Bool}. Devido à natureza sucessiva destes acontecimentos, as suas probabilidades estão organizadas numa
+\textbf{BTree (Dist Bool)}. Será essa BTree, em conjunto com a LTree, que será percorrida para dar resposta à probabilidade
+de cada uma das respostas.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{pbnavLTree}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{pbnavLTreeDist}\mathrel{=}\cata{\Varid{g}}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Conid{D}\;[\mskip1.5mu (\Conid{Leaf}\;\Varid{a},\mathrm{1})\mskip1.5mu]}{\Varid{f}}\;\mathbf{where}{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}\Varid{unfoldD}\;(\Conid{D}\;[\mskip1.5mu (\Varid{l}\;\Conid{Empty},\mathrm{0.5}),(\Varid{r}\;\Conid{Empty},\mathrm{0.5})\mskip1.5mu]){}\<[E]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}\Conid{D}\;[\mskip1.5mu (\Conid{Fork}\;(((\Varid{extract}\;(\Varid{l}\;\Conid{Empty}))\mathbin{!!}\mathrm{0}),((\Varid{extract}\;(\Varid{r}\;\Conid{Empty}))\mathbin{!!}\mathrm{0})),\mathrm{1})\mskip1.5mu];{}\<[E]%
 \\
 \>[3]{}\hsindent{10}{}\<[13]%
 \>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Varid{d},(\Varid{b1},\Varid{b2})))\mathrel{=}\Varid{\Conid{Probability}.cond}\;\Varid{d}\;(\Varid{l}\;\Varid{b1})\;(\Varid{r}\;\Varid{b2}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{arvoreDist}\mathrel{=}(\Conid{Node}\;((\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.7}),(\Conid{False},\mathrm{0.3})\mskip1.5mu]),((\Conid{Node}\;((\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.6}),(\Conid{False},\mathrm{0.4})\mskip1.5mu]),(\Conid{Empty},\Conid{Empty}))),\Conid{Empty}))){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Foi também desenvolvida uma função que se serve da maquinaria monádica para abstrair a monad, no caso de estarmos numa Leaf e 
+no caso em que a BTree é Empty. Esta revela-se mais intuitiva e tem a vantagem de não se estar a assumir o conteúdo de variáveis, 
+ao contrário do que acontece com extract, na função anterior. 
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{pbnavLTree}\mathrel{=}\cata{\Varid{g}}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\lambda \Varid{a}\;\anonymous \to \Varid{return}\;(\Conid{Leaf}\;\Varid{a})}{\Varid{f}}\;\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}(\Varid{prod}\;(\Varid{l}\;\Conid{Empty})\;(\Varid{r}\;\Conid{Empty}))\bind (\Varid{return}\comp \Conid{Fork}){}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\Varid{f}\;(\Varid{l},\Varid{r})\;(\Conid{Node}\;(\Varid{d},(\Varid{b1},\Varid{b2})))\mathrel{=}\Varid{\Conid{Probability}.cond}\;\Varid{d}\;(\Varid{l}\;\Varid{b1})\;(\Varid{r}\;\Varid{b2}){}\<[E]%
+\\
+\>[B]{}\Varid{xxx}\;(\Varid{l},\Varid{r})\;\Conid{Empty}\mathrel{=}(\Varid{prod}\;(\Varid{l}\;\Conid{Empty})\;(\Varid{r}\;\Conid{Empty}))\bind (\Varid{return}\comp \Conid{Fork}){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{x}\mathrel{=}\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Fork}\;(\Conid{Leaf}\;\text{\ttfamily \char34 Precisa\char34},\Conid{Leaf}\;\text{\ttfamily \char34 N~precisa\char34})){}\<[E]%
 \\
 \>[B]{}\Varid{z}\mathrel{=}\Conid{Node}\;(\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.6}),(\Conid{False},\mathrm{0.4})\mskip1.5mu],(\Conid{Empty},\Conid{Empty})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{testProb}\;(\Conid{Leaf}\;\Varid{a})\;\anonymous \mathrel{=}\Conid{D}\;[\mskip1.5mu (\Conid{Leaf}\;\Varid{a},\mathrm{1})\mskip1.5mu]{}\<[E]%
+\>[B]{}\Varid{anita}\mathrel{=}\Conid{Query}\;(\text{\ttfamily \char34 2a~feira?\char34},(\Conid{Query}\;(\text{\ttfamily \char34 chuva~na~ida\char34},(\Conid{Dec}\;\text{\ttfamily \char34 precisa\char34},\Conid{Query}\;(\text{\ttfamily \char34 chuva~no~regresso?\char34},(\Conid{Dec}\;\text{\ttfamily \char34 precisa\char34},\Conid{Dec}\;\text{\ttfamily \char34 nao~precisa\char34})))),\Conid{Dec}\;\text{\ttfamily \char34 nao~precisa\char34})){}\<[E]%
 \\
-\>[B]{}\Varid{testProb}\;(\Conid{Fork}\;(\Varid{t1},\Varid{t2}))\;\Conid{Empty}\mathrel{=}\Varid{unfoldD}\;(\Conid{D}\;[\mskip1.5mu ((\Varid{testProb}\;\Varid{t1}\;\Conid{Empty}),\mathrm{0.5}),((\Varid{testProb}\;\Varid{t2}\;\Conid{Empty}),\mathrm{05})\mskip1.5mu]){}\<[E]%
-\\
-\>[B]{}\Varid{testProb}\;(\Conid{Fork}\;(\Varid{t1},\Varid{t2}))\;(\Conid{Node}\;(\Varid{d},(\Varid{b1},\Varid{b2})))\mathrel{=}\Varid{\Conid{Probability}.cond}\;\Varid{d}\;(\Varid{testProb}\;\Varid{t1}\;\Varid{b1})\;(\Varid{testProb}\;\Varid{t2}\;\Varid{b2}){}\<[E]%
+\>[B]{}\Varid{testePaulo1}\mathrel{=}\Varid{extLTree}\;\Varid{anita}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{btreePaulo}\mathrel{=}\Conid{Node}\;(\Conid{D}\;[\mskip1.5mu (\Conid{True},\mathrm{0.8}),(\Conid{False},\mathrm{0.2})\mskip1.5mu],(\Conid{Empty},\Conid{Empty})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+O seguinte diagrama ilustra a o funcionamento do primeiro caso da função auxiliar f.
+\bigbreak
+Nota: unfoldD é a operação join/multiplicação da monad Dist.
+
+\begin{eqnarray*}
+\xymatrix@C=4cm{
+    \ensuremath{\fun{Dist}\;(\fun{Dist}\;\mathsf{LTree}\;\Conid{A})}
+          \ar[d]_-{\ensuremath{\Varid{unfoldD}}}
+&
+    \ensuremath{\fun{Dist}\;(\mathsf{LTree}\;\Conid{A})\;^2)}
+           \ar[l]_-{\ensuremath{\Conid{T}\;(\Varid{return}\comp \Conid{Fork})}}
+           \ar[l_d]_-{\ensuremath{\bind \Varid{return}\comp \Conid{Fork}}}
+\\
+     \ensuremath{\fun{Dist}\;(\mathsf{LTree}\;\Conid{A})}
+&
+     \ensuremath{(\Conid{Ltree}\;\Conid{A})\;^2}
+           \ar[l]^{\ensuremath{\Varid{return}\comp \Conid{Fork}}}
+}
+\end{eqnarray*}
+
 
 \subsection*{Problema 5}
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{6}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{14}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{31}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{truchet1}\mathrel{=}\Conid{Pictures}\;[\mskip1.5mu \Varid{put}\;(\mathrm{0},\mathrm{80})\;(\Conid{Arc}\;(\mathbin{-}\mathrm{90})\;\mathrm{0}\;\mathrm{40}),\Varid{put}\;(\mathrm{80},\mathrm{0})\;(\Conid{Arc}\;\mathrm{90}\;\mathrm{180}\;\mathrm{40})\mskip1.5mu]{}\<[E]%
@@ -1619,8 +1929,29 @@ Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá 
 \\[\blanklineskip]%
 \>[B]{}\mbox{\onelinecomment  defs auxiliares -------------}{}\<[E]%
 \\[\blanklineskip]%
+\>[B]{}\Varid{testHenrique}\mathrel{=}\Conid{Pictures}\;[\mskip1.5mu \Conid{Translate}\;\mathrm{0.0}\;\mathrm{0.0}\;(\Conid{Pictures}\;[\mskip1.5mu \Conid{Translate}\;\mathrm{0.0}\;\mathrm{80.0}\;(\Conid{Arc}\;(\mathbin{-}\mathrm{90.0})\;\mathrm{0.0}\;\mathrm{40.0}),\Conid{Translate}\;\mathrm{80.0}\;\mathrm{0.0}\;(\Conid{Arc}\;\mathrm{90.0}\;\mathrm{180.0}\;\mathrm{40.0})\mskip1.5mu]),\Conid{Translate}\;\mathrm{0.0}\;\mathrm{80.0}\;(\Conid{Pictures}\;[\mskip1.5mu \Conid{Translate}\;\mathrm{0.0}\;\mathrm{80.0}\;(\Conid{Arc}\;(\mathbin{-}\mathrm{90.0})\;\mathrm{0.0}\;\mathrm{40.0}),\Conid{Translate}\;\mathrm{80.0}\;\mathrm{0.0}\;(\Conid{Arc}\;\mathrm{90.0}\;\mathrm{180.0}\;\mathrm{40.0})\mskip1.5mu]),\Conid{Translate}\;\mathrm{80.0}\;\mathrm{0.0}\;(\Conid{Pictures}\;[\mskip1.5mu \Conid{Translate}\;\mathrm{0.0}\;\mathrm{0.0}\;(\Conid{Arc}\;\mathrm{0.0}\;\mathrm{90.0}\;\mathrm{40.0}),\Conid{Translate}\;\mathrm{80.0}\;\mathrm{80.0}\;(\Conid{Arc}\;\mathrm{180.0}\;(\mathbin{-}\mathrm{90.0})\;\mathrm{40.0})\mskip1.5mu]),\Conid{Translate}\;\mathrm{80.0}\;\mathrm{80.0}\;(\Conid{Pictures}\;[\mskip1.5mu \Conid{Translate}\;\mathrm{0.0}\;\mathrm{0.0}\;(\Conid{Arc}\;\mathrm{0.0}\;\mathrm{90.0}\;\mathrm{40.0}),\Conid{Translate}\;\mathrm{80.0}\;\mathrm{80.0}\;(\Conid{Arc}\;\mathrm{180.0}\;(\mathbin{-}\mathrm{90.0})\;\mathrm{40.0})\mskip1.5mu])\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]%
 \>[B]{}\Varid{put}{}\<[6]%
 \>[6]{}\mathrel{=}\uncurry{\Conid{Translate}}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{final}\mathrel{=}\mathbf{do}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{r}\leftarrow \Varid{generateMatrix}\;\mathrm{10}\;\mathrm{10}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{display}\;\Varid{janela}\;\Varid{white}\;\Varid{r}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{generateMatrix}\mathbin{::}\Conid{Int}\to \Conid{Int}\to \fun{IO}\;\Conid{Picture}{}\<[E]%
+\\
+\>[B]{}\Varid{generateMatrix}\;\Varid{i}\;\Varid{j}\mathrel{=}{}\<[23]%
+\>[23]{}(\Varid{sequence}\comp \Varid{replicate}\;(\Varid{i}\mathbin{*}\Varid{j})\mathbin{\$}\Varid{randomRIO}\;(\mathrm{0},\mathrm{1})\bind \Varid{generateTruchet})\bind (\Varid{return}\comp \Varid{pictures}\comp \Varid{zipWith}\;\Varid{id}\;\Varid{l}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{l}\mathrel{=}\mathbf{do}\;\{\mskip1.5mu \Varid{x'}\leftarrow \map \;(\mathrm{80}\mathbin{*})\;[\mskip1.5mu \mathrm{0}\mathinner{\ldotp\ldotp}(\Varid{fromIntegral}\;\Varid{i})\mathbin{-}\mathrm{1}\mskip1.5mu];\Varid{y'}\leftarrow \map \;(\mathrm{80}\mathbin{*})\;[\mskip1.5mu \mathrm{0}\mathinner{\ldotp\ldotp}(\Varid{fromIntegral}\;\Varid{j})\mathbin{-}\mathrm{1}\mskip1.5mu];\Varid{return}\;(\Varid{put}\;(\Varid{x'},\Varid{y'}))\mskip1.5mu\}{}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{generateTruchet}\;\Varid{x}\mathrel{=}\Varid{return}\comp \alt{\underline{\Varid{truchet1}}}{\underline{\Varid{truchet2}}}\mathbin{\$}\Varid{outNat}\mathbin{\$}\Varid{fromInteger}\;\Varid{x}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\mbox{\onelinecomment }{}\<[E]%
 \ColumnHook
