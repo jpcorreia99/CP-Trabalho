@@ -91,17 +91,17 @@
 %---------------------------------------------------------------------------
 
 \title{
-       	    Cálculo de Programas
+             Cálculo de Programas
 \\
-       	Trabalho Prático
+         Trabalho Prático
 \\
-       	MiEI+LCC --- 2019/20
+         MiEI+LCC --- 2019/20
 }
 
 \author{
-       	\dium
+         \dium
 \\
-       	Universidade do Minho
+         Universidade do Minho
 }
 
 
@@ -606,8 +606,8 @@ efeitos especiais em progra\-mação. Por exemplo, a biblioteca \Probability\
 oferece um mónade para abordar problemas de probabilidades. Nesta biblioteca,
 o conceito de distribuição estatística é captado pelo tipo
 \begin{eqnarray}
-	|newtype Dist a = D {unD :: [(a, ProbRep)]}|
-	\label{eq:Dist}
+  |newtype Dist a = D {unD :: [(a, ProbRep)]}|
+  \label{eq:Dist}
 \end{eqnarray}
 em que |ProbRep| é um real de |0| a |1|, equivalente a uma escala de $0$ a
 $100 \%$.
@@ -774,23 +774,23 @@ No anexo \ref{sec:codigo} é dada uma implementação da operação de permuta a
 Estudar o texto fonte deste trabalho para obter o efeito:\footnote{Exemplos tirados de \cite{Ol18}.} 
 \begin{eqnarray*}
 \start
-	|id = split f g|
+  |id = split f g|
 %
 \just\equiv{ universal property }
 %
         |lcbr(
-		p1 . id = f
-	)(
-		p2 . id = g
-	)|
+    p1 . id = f
+  )(
+    p2 . id = g
+  )|
 %
 \just\equiv{ identity }
 %
         |lcbr(
-		p1 = f
-	)(
-		p2 = g
-	)|
+    p1 = f
+  )(
+    p2 = g
+  )|
 \qed
 \end{eqnarray*}
 
@@ -988,48 +988,48 @@ while2 p f g = tailr ((g -|- f) . grd (not . p))
 
 discollect :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
 discollect = cataList g where
-	g = either (const []) (uncurry (++) . (f >< id))
-		where f (a,l) = map (split (const a)  id) l
+  g = either (const []) (uncurry (++) . (f >< id))
+    where f (a,l) = map (split (const a)  id) l
 
 discollect2 :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
 discollect2 = (>>= f) 
-		where f (a,l) = map (split (const a)  id) l
+    where f (a,l) = map (split (const a)  id) l
 
 dic_exp :: Dict -> [(String,[String])]
 dic_exp = collect . tar
 
 tar = cataExp g where
   g = either (singl . (split (const "") id)) (f)
-	where f (a,b) = map ((++) a >< id) (concat b) 
+  f (a,b) = map ((++) a >< id) (concat b) 
 
 
 
 {-dic_rd :: String -> Dict -> Maybe [String]
 dic_rd s d = while2 p loopBody exit (s,Just d)
-	where p(a,b) = (a /= [] && isJust b)
-	      exit(_,Nothing) = Nothing
+  where p(a,b) = (a /= [] && isJust b)
+        exit(_,Nothing) = Nothing
               exit([], Just (Var x)) = Just [x]
-	      exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
-					| otherwise = f l 
-	      	where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) -}
+        exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
+          | otherwise = f l 
+          where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) -}
 
 dic_rd :: String -> Dict -> Maybe [String]
 dic_rd s d = while2 p loopBody exit (s,Just d)
-	where p(a,b) = (a /= [] && isJust b)
-	      exit(_,Nothing) = Nothing
-              exit([], Just (Var x)) = Just [x]
-	      exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
-					| otherwise = f l 
-	      	where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) 
-	      
+  where p(a,b) = (a /= [] && isJust b)
+        exit(_,Nothing) = Nothing
+        exit([], Just (Var x)) = Just [x]
+        exit ([],Just (Term o l)) {-| (o == []) = Nothing -}
+          | otherwise = f l 
+          where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) 
+        
 
 loopBody (s,Just (Var v)) = (s,Nothing)
 loopBody(s,Just (Term o l)) | (o == []) = (s, termLsearch s l)
-		            | (head s == head o) = (tail s,Just (Term o l))	
-	              	    | otherwise = (s, termLsearch s l) 
+                            | (head s == head o) = (tail s,Just (Term o l))
+                            | otherwise = (s, termLsearch s l) 
 
-		 
-	
+
+  
 termLsearch s ((Term o l):xs) = if (head s == head o) then Just (Term o l) else termLsearch s xs
 termLsearch s (_:xs) = termLsearch s xs
 termLsearch _ [] = Nothing 
@@ -1048,21 +1048,21 @@ dic_in p t d = dic_in_aux (Just (traductionToDict (p,t)), d)
 
 dic_in_aux :: (Maybe (Dict), Dict) -> Dict
 dic_in_aux = anaExp g
-	where g(_,Var v) = i1(v)
-	      g(Just (Term a b),Term o l)  | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
-					   | (head o == head a) =  recExp (split (const (Just (head b))) id)  (outExp(Term o (insertIfAbsent (head b,l))))
-					   | otherwise = recExp (split nothing id)  (outExp (Term o l))
-	      g(Nothing, v) =  recExp (split nothing id) (outExp v)
+  where g(_,Var v) = i1(v)
+        g(Just (Term a b),Term o l)  | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
+             | (head o == head a) =  recExp (split (const (Just (head b))) id)  (outExp(Term o (insertIfAbsent (head b,l))))
+             | otherwise = recExp (split nothing id)  (outExp (Term o l))
+        g(Nothing, v) =  recExp (split nothing id) (outExp v)
 
 
 {-
 insertIfPresent :: (Dict,[Dict]) -> [Dict]
 insertIfPresent = hyloSList f g
-	where g (Term a b, ((Term o l):ds)) | (head a == head o) = i1((Term o l):ds)
-					    | otherwise = i2(Term o l, (Term a b, ds))
-	      g (l, (Var x):ds) = i2 (Var x, (l,ds))
-	      g (l,[]) = i1(singl l)
-	      f = either id cons-}
+  where g (Term a b, ((Term o l):ds)) | (head a == head o) = i1((Term o l):ds)
+              | otherwise = i2(Term o l, (Term a b, ds))
+        g (l, (Var x):ds) = i2 (Var x, (l,ds))
+        g (l,[]) = i1(singl l)
+        f = either id cons-}
 
 insertIfAbsent ((Term o l),((Term a b):ts)) = if (head o == head a) then ((Term a b):ts) else (Term a b):(insertIfAbsent((Term o l),ts))
 insertIfAbsent ((Term o l),[]) =  [(Term o l)]
@@ -1071,8 +1071,8 @@ insertIfAbsent (l,(t:ts)) = t:(insertIfAbsent(l,ts))
 
 traductionToDict :: (String,String) -> Dict
 traductionToDict = anaExp g where
-	g([],t) = i1(t);
-	g(p:ps,t) = i2(singl p, singl (ps,t))
+  g([],t) = i1(t);
+  g(p:ps,t) = i2(singl p, singl (ps,t))
 
 
 \end{code}
@@ -1109,7 +1109,7 @@ isOrd = p1 . cataBTree g
       where g = either (const (True,Empty)) (split (f2 (funcaoComparacao . Node)) (Node . f))
             f = (id >< (p2 >< p2)) --(a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)
             f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c) 
-	    funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
+            funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
 
 
 
@@ -1126,11 +1126,11 @@ lrot (Node (black,(blue,(Node (red,(green,purple)))))) = Node(red,((Node (black,
 
 
 splay = cataList g
-	where g = either (const id) f
-	      f(True,l) = rrot . l   
-              f(False,l) = lrot . l
+  where g = either (const id) f
+        f(True,l) = rrot . l   
+        f(False,l) = lrot . l
 {-            f _ Empty = Empty
-	      f (b1,b2) (Node (a,(t1,t2))) = if b1 then b2 t1 else b2 t2-}
+        f (b1,b2) (Node (a,(t1,t2))) = if b1 then b2 t1 else b2 t2-}
   
 \end{code}
 
@@ -1222,18 +1222,18 @@ Cond receberá uma Dist de boleanos assim como duas dists de LTree e devolverá 
 
 \begin{code}
 
-pbnavLTreePointFree = cataLTree (either (const . certainly . Leaf) undefined)
-  {-where g = either (\a _ -> D [(Leaf a,1)]) f where
-            f (l, r) Empty = unfoldD (D [(l Empty,0.5),(r Empty,0.5)])
-            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)-}
-
 pbnavLTree = cataLTree g
-  where g = either (\a _ -> D [(Leaf a,1)]) f where
-            f (l, r) Empty = unfoldD (D [(l Empty,0.5),(r Empty,0.5)])
+  where g = either (\a _ -> return (Leaf a)) f where
+            f (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
             f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
 
 
-arvoreDist= (Node ((D[(True,0.7),(False,0.3)]),((Node ((D[(True,0.6),(False,0.4)]),(Empty,Empty))),Empty)))
+pbnavLTreeDist = cataLTree g
+  where g = either (\a _ -> D [(Leaf a,1)]) f where
+            --f (l, r) Empty = unfoldD (D [(l Empty,0.5),(r Empty,0.5)])
+            f (l, r) Empty = D[(Fork(((extract (l Empty))!!0),((extract (r Empty))!!0)),1)];
+            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
+
 
 x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
 z = Node(D[(True,0.6),(False,0.4)],(Empty,Empty))
@@ -1243,9 +1243,6 @@ testePaulo1 = extLTree anita
 
 btreePaulo = Node(D[(True, 0.8) , (False, 0.2)], (Empty, Empty))
 
-testProb (Leaf a) _ = D[(Leaf a,1)]
-testProb (Fork(t1,t2)) Empty = unfoldD (D [((testProb t1 Empty),0.5),((testProb t2 Empty),05)])
-testProb (Fork(t1,t2)) (Node(d, (b1,b2))) = Probability.cond d (testProb t1 b1) (testProb t2 b2)
 
 \end{code}
 
@@ -1271,38 +1268,19 @@ testHenrique = Pictures [Translate 0.0 0.0 (Pictures [Translate 0.0 80.0 (Arc (-
 put  = uncurry Translate 
 
 final = do
-	r <- l 2 2
-	display janela white r
+  r <- generateMatrix 10 10
+  display janela white r
 
-l2 :: Int -> Int -> IO Picture
-l2 i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generate2) >>= (return . pictures . zipWith id l)
-	where x = fromIntegral i
-	      y = fromIntegral j
-	      l = do { x' <- map (80 *) [0..x-1]; y' <- map (80 *) [0..y-1]; return(put(x',y'))}
-
-
-generate2 :: Int -> IO Picture
-generate2 0 = return truchet1;generate2 1 = return truchet2
+generateMatrix :: Int -> Int -> IO Picture
+generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generateTruchet) >>= (return . pictures . zipWith id l)
+  where x = fromIntegral i
+        y = fromIntegral j
+        l = do { x' <- map (80 *) [0..x-1]; y' <- map (80 *) [0..y-1]; return(put(x',y'))}
 
 
-l :: Int -> Int -> IO Picture
-l i j =  (sequence $ replicate (i * j) $ ( (randomRIO(0,1)) >>= generate2)) >>= (associate3 (fromIntegral i) (fromIntegral j))  
-
-
-
-associate3 :: Float -> Float -> [Picture] -> IO Picture
-associate3 i j = return . pictures . zipWith id l
-	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(put(x,y))}
-
-
-associate2 :: Float -> Float -> [Picture] -> IO Picture
-associate2 i j a = return (pictures $ map (uncurry put) $ zipWith (curry id) l a)
-	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(x,y)}
-
-
-associate :: Float -> Float -> [a] -> IO [((Float,Float),a)]
-associate i j a = return (zipWith (curry id) l a)
-	where l = do { x <- map (80 *) [0..i-1]; y <- map (80 *) [0..j-1]; return(x,y)}
+generateTruchet :: Int -> IO Picture
+generateTruchet 0 = return truchet1
+generateTruchet 1 = return truchet2
 
 
 
