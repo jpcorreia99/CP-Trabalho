@@ -974,6 +974,30 @@ alterados os nomes ou tipos das funções dadas, mas pode ser adicionado texto e
 outras funções auxiliares que sejam necessárias.
 
 \subsection*{Problema 1}
+\subsection*{QuickChecks adicionais}
+
+\begin{code}
+valid t = t == (dic_imp . dic_norm . dic_exp) t
+\end{code}
+\begin{propriedade}
+Se um significado |s| de uma palavra |p| já existe num dicionário normalizado então adicioná-lo
+em memória não altera nada:
+\begin{code}
+prop_dic_red1 p s d
+   | d /= dic_norm d = True  
+   | dic_red p s d = dic_imp d == dic_in p s (dic_imp d)
+   | otherwise = True
+\end{code}
+\end{propriedade}
+\begin{propriedade}
+A operação |dic_rd| implementa a procura na correspondente exportação de um dicionário normalizado:
+\begin{code}
+prop_dic_rd1 (p,t)
+   | valid t     = dic_rd  p t == lookup p (dic_exp t)
+   | otherwise = True
+\end{code}
+\end{propriedade}
+
 \subsection*{Definições auxiliares}
 \begin{code}
 data XNat a = Zero a | Succ (XNat a) deriving Show
@@ -990,6 +1014,17 @@ hyloXNat a c = cataXNat a . anaXNat c
 codiag = either id id
 tailr = hyloXNat codiag
 while2 p f g = tailr ((g -|- f) . grd (not . p))
+
+
+data SList a b = Stl b | Cons a (SList a b) deriving Show
+
+inSList = either Stl (uncurry Cons)
+
+outSList (Stl b)      = i1 b
+outSList (Cons a s) = i2 (a,s)
+baseSList z x y = z -|- x >< y
+recSList f = baseSList id id f
+anaSList g = inSList . (recSList (anaSList g) ) . g
 \end{code}
 
 \subsection*{Discollect}
@@ -1021,22 +1056,20 @@ tar = cataExp g where
 \subsection*{Dic\_rd}
 \begin{code}
 dic_rd :: String -> Dict -> Maybe [String]
-dic_rd s d = while2 p loopBody exit (s,Just d)
-  where p(a,b) = (a /= [] && isJust b)
-        exit(_,Nothing) = Nothing
-        exit([], Just (Var x)) = Just [x]
-        exit ([],Just (Term o l)) 
-          | otherwise = f l 
-          where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) 
-        
-
+dic_rd s d = while2 p loopBody exit (s,Just d) where 
+              p(a,b) = (((length a) > 1) && isJust b)
+              exit(_,Nothing) = Nothing
+              exit([],_) = Nothing
+              exit([w], Just (Var x)) = Nothing
+              exit ([w],Just (Term o l)) | (o == [] || w /= head o) = Nothing
+                                         |otherwise = f l 
+                   where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) 
+            
 loopBody (s,Just (Var v)) = (s,Nothing)
 loopBody(s,Just (Term o l)) | (o == []) = (s, termLsearch s l)
-                            | (head s == head o) = (tail s,Just (Term o l))
-                            | otherwise = (s, termLsearch s l) 
+                  | (head s == head o) = (tail s,termLsearch (tail s) l)
+                  | otherwise = (s, termLsearch s l)
 
-
-  
 termLsearch s ((Term o l):xs) = if (head s == head o) then Just (Term o l) else termLsearch s xs
 termLsearch s (_:xs) = termLsearch s xs
 termLsearch _ [] = Nothing 
@@ -1052,27 +1085,36 @@ isLeft _ = False
 \subsection*{Dic\_in}
 \begin{code}
 dic_in :: String -> String -> Dict -> Dict
-dic_in p t d = dic_in_aux (Just (traductionToDict (p,t)), d)
+dic_in p t d = hyloExp conquer divide (Just (traductionToSList (p,t)), d) where
+    conquer = inExp . either outExp i2
+    divide (Nothing, g) = i1(g)
+    divide (_,Var l) = i1(Var l)
+    divide (Just (Cons x xs),Term o l) | (o == []) =  i2 $ (o,divide_aux (Cons x xs) (False,l))
+          | (x == head o) = i2 $ (o,divide_aux xs (False,l))
+                                        | otherwise = i1(Term o l)
+     
 
+traductionToSList :: (String,String) -> SList Char String
+traductionToSList = anaSList g where
+  g([],t) = i1(t);
+  g(p:ps,t) = i2(p,(ps,t))
 
-dic_in_aux :: (Maybe (Dict), Dict) -> Dict
-dic_in_aux = anaExp g
-  where g(_,Var v) = i1(v)
-        g(Just (Term a b),Term o l) | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
-             | (head o == head a) =  recExp (split (const (Just (head b))) id)  (outExp(Term o (insertIfAbsent (head b,l))))
-             | otherwise = recExp (split nothing id)  (outExp (Term o l))
-        g(Nothing, v) =  recExp (split nothing id) (outExp v)
-
-
-insertIfAbsent ((Term o l),((Term a b):ts)) = if (head o == head a) then ((Term a b):ts) else (Term a b):(insertIfAbsent((Term o l),ts))
-insertIfAbsent ((Term o l),[]) =  [(Term o l)]
-insertIfAbsent (l,(t:ts)) = t:(insertIfAbsent(l,ts))
+divide_aux :: (SList Char String) -> (Bool,[Dict]) -> [(Maybe (SList Char String),Dict)]
+divide_aux x (bool,[]) = if (not bool) 
+                         then singl . split (Just . const x) id . either Var (uncurry Term . (singl >< (const []))) $ outSList x 
+                         else []
+divide_aux x (bool,((Var v):ts)) = ((Nothing,(Var v)) : (divide_aux x (test_bool,ts)))
+                        where test_bool =  either (v ==) false $ outSList x 
+divide_aux x (bool,((Term o l):ts)) | (o == []) = (Nothing,Term o l) : (divide_aux x (bool,ts))
+                                    | (not bool && (either false ((== head o) .p1) $ outSList x)) = 
+                                      (Just x,Term o l) : (divide_aux x (True,ts))
+                                    | otherwise = (Nothing,(Term o l)) : (divide_aux x (bool,ts))
 
 
 traductionToDict :: (String,String) -> Dict
 traductionToDict = anaExp g where
-  g([],t) = i1(t);
-  g(p:ps,t) = i2(singl p, singl (ps,t))
+       g([],t) = i1(t);
+       g(p:ps,t) = i2(singl p, singl (ps,t))
 
 
 \end{code}
@@ -1149,9 +1191,12 @@ lrot (Node (black,(blue,(Node (red,(green,purple)))))) = Node(red,((Node (black,
 
 splay = cataList g
   where g = either (const id) f
-        f(True,l) = rrot . l   
-        f(False,l) = lrot . l
-  
+        f (True,l) = rrot . l   
+        f (False,l) = lrot . l
+
+splay1 (True,l) = rrot . l   
+
+test ("d","g") = "k";
 \end{code}
 
 \subsection*{Problema 3}
@@ -1202,15 +1247,22 @@ extLTree = cataBdt g where
 \end{code}
 
 \subsection*{NavLTree}
+Visto que as funções do haskell são naturalmente curried, é possível dizer que  f :: a -\textgreater b -\textgreater c 
+é o mesmo que f :: a -\textgreater (b -\textgreater c).
 
-Versão pointfree
+Esse facto permite-nos obter o tipo da assinatura de navLTree como sendo uma função que recebe uma LTree A e 
+devolve uma função que vai [Bool] para Ltree A.
 
+
+\bigbreak
+\textbf{Versão pointfree}
 \begin{code}
 
 navLTree :: LTree a -> ([Bool] -> LTree a)
 navLTree = cataLTree (either (const . Leaf) (\(l,r) -> Cp.cond null (Fork . split l r) (Cp.cond head (l . tail) (r . tail)))) 
 \end{code}
-Versão pointwise
+
+\textbf{Versão pointwise}
 
 \begin{code}
 navLTreePointWise :: LTree a -> ([Bool] -> LTree a)
@@ -1239,11 +1291,12 @@ navLTreePointWise = cataLTree g
 
 \subsection*{Problema 4}
 \subsection*{BnavLTree}
-Versão pointfree
+Esta função é bastante semelhante à função \textbf{navLTree} do exercício 3, sendo a principal diferença que agora será uma BTree Bool 
+a ditar a navegação e não uma lista de Boleanos.
+
+\bigbreak
+\textbf{Versão pointfree}
 \begin{code}
-
-y = Node(True, (Node(True,(Empty,Empty)),Empty))
-
 
 bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (g (l,r)) (h (l,r))))
     where f = (const . Leaf)
@@ -1252,7 +1305,7 @@ bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (g (l,
           outNode (Node(a,(b,c))) = (a,(b,c))
 
 \end{code}
-Versão pointwise
+\textbf{Versão pointwise}
 \begin{code}
 bnavLTreePointWise = cataLTree g
   where g = either (\a _ -> Leaf a) f where
@@ -1345,9 +1398,12 @@ janela = InWindow
 
 put  = uncurry Translate 
 
-main = do
-  r <- generateMatrix 10 10
+matrix x y = do
+  r <- generateMatrix x y
   display janela white r
+
+
+
 
 generateMatrix :: Int -> Int -> IO Picture
 generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generateTruchet) 
