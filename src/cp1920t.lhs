@@ -90,6 +90,8 @@
 %format (expn (a) (n)) = "{" a "}^{" n "}" 
 %format (anaBdt (g)) = "\ana{" g "}"
 %format (cataBTree (g)) = "\cata{" g "}"
+%format (anaFTree (g)) = "\ana{" g "}"
+%format (cataFTree (g)) = "\cata{" g "}"
 %format joinMonad = "μ"
 
 %---------------------------------------------------------------------------
@@ -1123,14 +1125,41 @@ traductionToDict = anaExp g where
 
 \subsection*{maisDir}
 
+Esta função aplica o catamorfismo sobre BTrees. Caso a BTree seja Empty retorna Nothing, 
+caso contrário a cada iteração verifica se a árvore da Direita (p2.p2) é vazia e se for 
+retorna o nodo (return . p1), se não for retorna a árvore da Direita (const (p2.p2)) 
+para continuar a percorrer recursivamente. A maneira como isto é feito é conservando (através de um split) num par a função 
+a aplicar ao nodo desconstruido (após outBTree) no lado esquerdo e o nodo desconstruido no lado direito com o id. 
+De seguida chama-se a função Cp.ap que aplica a função do lado esquerdo ao elemento do lado direito.
+
 \begin{code}
 maisDir = cataBTree g
     where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p2.p2)) . p2 . p2) id)
 \end{code}
 
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |BTree X|
+           \ar[d]_-{|cataBTree (g)|}
+           \ar[r]_-{|outBTree|}
+&
+    |1 + (X >< (BTree X)quadrado)|
+           \ar[d]^-{|id + id >< (cataBTree (g)quadrado|}
+\\
+     |Maybe X|
+&
+     |1 + (X >< (Maybe X) quadrado)|
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
+
 \subsection*{maisEsq}
 
-\begin{code}
+Esta função funciona de forma análoga à função de cima com a única diferença ser avaliar a àrvore da esquerda
+e retornar essa mesma àrvore para a chamada recursiva.
+
+\begin{code} 
+
 maisEsq = cataBTree g 
   where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p1.p2)) . p1 . p2) id)
 \end{code}
@@ -1141,12 +1170,12 @@ maisEsq = cataBTree g
            \ar[d]_-{|cataBTree (g)|}
            \ar[r]_-{|outBTree|}
 &
-    |1 + X >< (BTree X)quadrado)|
+    |1 + (X >< (BTree X)quadrado)|
            \ar[d]^-{|id + id >< (cataBTree (g)quadrado|}
 \\
-     |1 + X|
+     |Maybe X|
 &
-     |1 + X >< BTree X|
+     |1 + (X >< (Maybe X) quadrado)|
            \ar[l]^-{g}
 }
 \end{eqnarray*}
@@ -1163,7 +1192,38 @@ insOrd a x = hyloFTree (conquer) (divide) (Just a,x)
                                          | a > n = i2(n,((Nothing,t1),(Just a,t2)))
         divide (Nothing,p) = i1(p);
         conquer = inBTree . either (outBTree) i2
+
+conquer2 = inBTree . either (outBTree) i2
+
+divide2 (Just a,Empty) = i1(Node(a,(Empty,Empty)))
+divide2 (Just a,Node (n,(t1,t2))) | a <= n = i2(n,((Just a,t1),(Nothing,t2)))
+                                 | a > n = i2(n,((Nothing,t1),(Just a,t2)))
+divide2 (Nothing,p) = i1(p);
+        
 \end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |(Maybe X >< BTree X)|
+           \ar[d]_-{|anaFTree (divide)|}
+           \ar[r]_-{|divide|}
+&
+    |BTree X + (X >< (Maybe X >< BTree X) quadrado)|
+           \ar[d]^-{|id + id >< (anaFTree (divide)quadrado|}
+\\
+     |FTree(X ,BTree X)|
+           \ar[d]_-{|cataFTree (conquer)|}
+&
+     |BTree X + (X >< (FTree (X,BTree X)) quadrado)|
+           \ar[d]^-{|id + id >< (cataFTree (conquer)quadrado|}
+\\  
+     |BTree X| 
+&
+     |BTree X + (X >< (BTree X)quadrado)|
+           \ar[l]^-{conquer}        
+}
+\end{eqnarray*}
+
 
 \subsection*{isOrd}
 \begin{code}
@@ -1173,7 +1233,7 @@ isOrd' = cataBTree g
 
 isOrd = p1 . cataBTree g 
       where g = either (const (True,Empty)) (split (f2 (funcaoComparacao . Node)) (Node . f))
-            f = (id >< (p2 >< p2)) --(a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)
+            f = (id >< (p2 >< p2))
             f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c) 
             funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
 \end{code}

@@ -1668,6 +1668,13 @@ Foi também desenvolvida um versão utilizando o operador bind
 
 \subsection*{maisDir}
 
+Esta função aplica o catamorfismo sobre BTrees. Caso a BTree seja Empty retorna Nothing, 
+caso contrário a cada iteração verifica se a árvore da Direita (p2.p2) é vazia e se for 
+retorna o nodo (return . p1), se não for retorna a árvore da Direita (const (p2.p2)) 
+para continuar a percorrer recursivamente. A maneira como isto é feito é conservando (através de um split) num par a função 
+a aplicar ao nodo desconstruido (após outBTree) no lado esquerdo e o nodo desconstruido no lado direito com o id. 
+De seguida chama-se a função Cp.ap que aplica a função do lado esquerdo ao elemento do lado direito.
+
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -1679,7 +1686,26 @@ Foi também desenvolvida um versão utilizando o operador bind
 \ColumnHook
 \end{hscode}\resethooks
 
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\fun{BTree} \;\Conid{X}}
+           \ar[d]_-{\ensuremath{\cata{\Varid{g}}}}
+           \ar[r]_-{\ensuremath{\Varid{outBTree}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}(\Conid{X}\times(\fun{BTree} \;\Conid{X})\;^2)}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\cata{\Varid{g}}\;^2}}
+\\
+     \ensuremath{\Conid{Maybe}\;\Conid{X}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}(\Conid{X}\times(\Conid{Maybe}\;\Conid{X})\;^2)}
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
+
 \subsection*{maisEsq}
+
+Esta função funciona de forma análoga à função de cima com a única diferença ser avaliar a àrvore da esquerda
+e retornar essa mesma àrvore para a chamada recursiva.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -1698,12 +1724,12 @@ Foi também desenvolvida um versão utilizando o operador bind
            \ar[d]_-{\ensuremath{\cata{\Varid{g}}}}
            \ar[r]_-{\ensuremath{\Varid{outBTree}}}
 &
-    \ensuremath{\mathrm{1}\mathbin{+}\Conid{X}\times(\fun{BTree} \;\Conid{X})\;^2)}
+    \ensuremath{\mathrm{1}\mathbin{+}(\Conid{X}\times(\fun{BTree} \;\Conid{X})\;^2)}
            \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\cata{\Varid{g}}\;^2}}
 \\
-     \ensuremath{\mathrm{1}\mathbin{+}\Conid{X}}
+     \ensuremath{\Conid{Maybe}\;\Conid{X}}
 &
-     \ensuremath{\mathrm{1}\mathbin{+}\Conid{X}\times\fun{BTree} \;\Conid{X}}
+     \ensuremath{\mathrm{1}\mathbin{+}(\Conid{X}\times(\Conid{Maybe}\;\Conid{X})\;^2)}
            \ar[l]^-{g}
 }
 \end{eqnarray*}
@@ -1714,6 +1740,7 @@ Foi também desenvolvida um versão utilizando o operador bind
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{34}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{42}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{insOrd'}\mathrel{=}\bot {}\<[E]%
@@ -1734,8 +1761,42 @@ Foi também desenvolvida um versão utilizando o operador bind
 \\
 \>[3]{}\hsindent{6}{}\<[9]%
 \>[9]{}\Varid{conquer}\mathrel{=}\Varid{inBTree}\comp \alt{\Varid{outBTree}}{i_2}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{conquer2}\mathrel{=}\Varid{inBTree}\comp \alt{\Varid{outBTree}}{i_2}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{divide2}\;(\Conid{Just}\;\Varid{a},\Conid{Empty})\mathrel{=}i_1\;(\Conid{Node}\;(\Varid{a},(\Conid{Empty},\Conid{Empty}))){}\<[E]%
+\\
+\>[B]{}\Varid{divide2}\;(\Conid{Just}\;\Varid{a},\Conid{Node}\;(\Varid{n},(\Varid{t1},\Varid{t2})))\mid \Varid{a}\leq \Varid{n}\mathrel{=}i_2\;(\Varid{n},((\Conid{Just}\;\Varid{a},\Varid{t1}),(\Conid{Nothing},\Varid{t2}))){}\<[E]%
+\\
+\>[B]{}\hsindent{34}{}\<[34]%
+\>[34]{}\mid \Varid{a}\mathbin{>}\Varid{n}\mathrel{=}i_2\;(\Varid{n},((\Conid{Nothing},\Varid{t1}),(\Conid{Just}\;\Varid{a},\Varid{t2}))){}\<[E]%
+\\
+\>[B]{}\Varid{divide2}\;(\Conid{Nothing},\Varid{p})\mathrel{=}i_1\;(\Varid{p});{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{(\Conid{Maybe}\;\Conid{X}\times\fun{BTree} \;\Conid{X})}
+           \ar[d]_-{\ensuremath{\ana{\Varid{divide}}}}
+           \ar[r]_-{\ensuremath{\Varid{divide}}}
+&
+    \ensuremath{\fun{BTree} \;\Conid{X}\mathbin{+}(\Conid{X}\times(\Conid{Maybe}\;\Conid{X}\times\fun{BTree} \;\Conid{X})\;^2)}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\ana{\Varid{divide}}\;^2}}
+\\
+     \ensuremath{\Conid{FTree}\;(\Conid{X},\fun{BTree} \;\Conid{X})}
+           \ar[d]_-{\ensuremath{\cata{\Varid{conquer}}}}
+&
+     \ensuremath{\fun{BTree} \;\Conid{X}\mathbin{+}(\Conid{X}\times(\Conid{FTree}\;(\Conid{X},\fun{BTree} \;\Conid{X}))\;^2)}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\cata{\Varid{conquer}}\;^2}}
+\\  
+     \ensuremath{\fun{BTree} \;\Conid{X}} 
+&
+     \ensuremath{\fun{BTree} \;\Conid{X}\mathbin{+}(\Conid{X}\times(\fun{BTree} \;\Conid{X})\;^2)}
+           \ar[l]^-{conquer}        
+}
+\end{eqnarray*}
+
 
 \subsection*{isOrd}
 \begin{hscode}\SaveRestoreHook
@@ -1755,7 +1816,7 @@ Foi também desenvolvida um versão utilizando o operador bind
 \>[7]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{(\Conid{True},\Conid{Empty})}}{\conj{\Varid{f2}\;(\Varid{funcaoComparacao}\comp \Conid{Node})}{\Conid{Node}\comp \Varid{f}}}{}\<[E]%
 \\
 \>[7]{}\hsindent{6}{}\<[13]%
-\>[13]{}\Varid{f}\mathrel{=}(\Varid{id}\times(\p2\times\p2))\mbox{\onelinecomment (a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)}{}\<[E]%
+\>[13]{}\Varid{f}\mathrel{=}(\Varid{id}\times(\p2\times\p2)){}\<[E]%
 \\
 \>[7]{}\hsindent{6}{}\<[13]%
 \>[13]{}\Varid{f2}\;\Varid{p}\;(\Varid{a},(\Varid{b},\Varid{c}))\mathrel{=}\Varid{p}\;(\Varid{f}\;(\Varid{a},(\Varid{b},\Varid{c})))\mathrel{\wedge}\p1\;(\Varid{b})\mathrel{\wedge}\p1\;(\Varid{c}){}\<[E]%
