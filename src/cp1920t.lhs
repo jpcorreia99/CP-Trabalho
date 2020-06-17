@@ -1237,6 +1237,19 @@ splay = cataList g
   where g = either (const id) f
         f (True,l) = rrot . l   
         f (False,l) = lrot . l
+
+ff (True,l) = rrot . l   
+ff (False,l) = lrot . l
+
+gg (a,(l,r)) []  = (Node(a,(l [], r[])))
+gg (a,(l,r)) (True:hs)  = l hs
+gg (a,(l,r)) (False:hs) = r hs
+
+
+splay2 = flip (cataList g)
+  where g = either (\_ _ -> Empty) gg
+
+
 \end{code}
 
 \subsection*{Problema 3}
