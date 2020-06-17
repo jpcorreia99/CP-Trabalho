@@ -1093,8 +1093,6 @@ traductionToDict = anaExp g where
   g(p:ps,t) = i2(singl p, singl (ps,t))
 
 
--- x -> SList que representa o Dict com a traduçao a ser inserida
---Bool -> se o Dict com a mesma primeira letra ou a mesma traducao ja foi encontrada 
 divide_aux :: Dict -> (Bool,[Dict]) -> [(Maybe Dict,Dict)]
 divide_aux x (bool,[]) = if (not bool) 
                          then singl (Nothing,x)
