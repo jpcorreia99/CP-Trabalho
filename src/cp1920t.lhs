@@ -92,6 +92,8 @@
 %format (cataBTree (g)) = "\cata{" g "}"
 %format (anaFTree (g)) = "\ana{" g "}"
 %format (cataFTree (g)) = "\cata{" g "}"
+%format (anaList (g)) = "\ana{" g "}"
+%format (cataList (g)) = "\cata{" g "}"
 %format joinMonad = "μ"
 
 %---------------------------------------------------------------------------
@@ -1167,6 +1169,18 @@ maisEsq = cataBTree g
 
 
 \subsection*{insOrd}
+
+A insOrd usa um hilomorfismo (divide and conquer) Hard Split/Easy Join. 
+
+Recebe um par do tipo (Maybe X, BTree X) com o elemento a inserir e a àrvore e aplica um anamorfismo de FTree
+com o gene divide.
+
+Isto para recursivamente percorrer a BTree segundo a procura binaria e construir um FTree,
+conservando os ramos rejeitados pela procura binaria (passando o Nothing no lado esquerdo do par para a iteracao seguinte e colocando o caso de paragem adequado para ser injetado)
+até encontrar uma árvore Empty onde injeta o novo nodo.
+
+Depois aplica um catamorfismo com o gene conquer para converter a FTree numa BTree com o elemento inserido ordenadamente.
+
 \begin{code}
 
 insOrd' = undefined
@@ -1177,13 +1191,6 @@ insOrd a x = hyloFTree (conquer) (divide) (Just a,x)
                                          | a > n = i2(n,((Nothing,t1),(Just a,t2)))
         divide (Nothing,p) = i1(p);
         conquer = inBTree . either (outBTree) i2
-
-conquer2 = inBTree . either (outBTree) i2
-
-divide2 (Just a,Empty) = i1(Node(a,(Empty,Empty)))
-divide2 (Just a,Node (n,(t1,t2))) | a <= n = i2(n,((Just a,t1),(Nothing,t2)))
-                                 | a > n = i2(n,((Nothing,t1),(Just a,t2)))
-divide2 (Nothing,p) = i1(p);
         
 \end{code}
 
@@ -1223,34 +1230,53 @@ isOrd = p1 . cataBTree g
             funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
 \end{code}
 
-\subsection*{Splay}
+
+\subsection*{rrot}
+
+Faz uma rotação à direita numa BTree
+
 \begin{code}
 rrot Empty = Empty
 rrot t@(Node (a,(Empty,d))) = t
 rrot (Node (black,((Node (red,(purple,green))),blue))) = Node(red,(purple,(Node (black,(green,blue)))))
+\end{code}
 
+\subsection*{lrot}
+
+Faz uma rotação à esquerda numa BTree
+
+\begin{code}
 lrot Empty = Empty
 lrot t@(Node (a,(e,Empty))) = t
 lrot (Node (black,(blue,(Node (red,(green,purple)))))) = Node(red,((Node (black,(blue,green)),purple)))
+\end{code}
 
+\subsection*{Splay}
+
+Aplica um catamorfismo de Listas para recursivamente rodar a arvore de acordo com os valores booleanos
+
+\begin{code}
 splay = cataList g
   where g = either (const id) f
         f (True,l) = rrot . l   
         f (False,l) = lrot . l
-
-ff (True,l) = rrot . l   
-ff (False,l) = lrot . l
-
-gg (a,(l,r)) []  = (Node(a,(l [], r[])))
-gg (a,(l,r)) (True:hs)  = l hs
-gg (a,(l,r)) (False:hs) = r hs
-
-
-splay2 = flip (cataList g)
-  where g = either (\_ _ -> Empty) gg
-
-
 \end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |List Bool|
+           \ar[d]_-{|cataList (g)|}
+           \ar[r]_-{|outList|}
+&
+    |1 + (Bool >< List Bool)|
+           \ar[d]^-{|id + id >< (cataList (g)quadrado|}
+\\
+     |expn (BTree a) (BTree a)|
+&
+     |1 + (Bool >< (expn (BTree a) (BTree a)))|
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 3}
 \subsection*{Definições iniciais}

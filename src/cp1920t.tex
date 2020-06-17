@@ -1457,7 +1457,7 @@ A operação \ensuremath{\Varid{dic\char95 rd}} implementa a procura na correspo
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{discollect}\mathbin{::}(\Conid{Ord}\;\Varid{b},\Conid{Ord}\;\Varid{a})\Rightarrow [\mskip1.5mu (\Varid{b},[\mskip1.5mu \Varid{a}\mskip1.5mu])\mskip1.5mu]\to [\mskip1.5mu (\Varid{b},\Varid{a})\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{discollect}\mathrel{=}\Varid{cataList}\;\Varid{g}\;\mathbf{where}{}\<[E]%
+\>[B]{}\Varid{discollect}\mathrel{=}\cata{\Varid{g}}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{g}\mathrel{=}\alt{\underline{[\mskip1.5mu \mskip1.5mu]}}{\uncurry{(\plus )}\comp (\Varid{f}\times\Varid{id})}{}\<[E]%
@@ -1712,11 +1712,22 @@ e retornar essa mesma àrvore para a chamada recursiva.
 
 
 \subsection*{insOrd}
+
+A insOrd usa um hilomorfismo (divide and conquer) Hard Split/Easy Join. 
+
+Recebe um par do tipo (Maybe X, BTree X) com o elemento a inserir e a àrvore e aplica um anamorfismo de FTree
+com o gene divide.
+
+Isto para recursivamente percorrer a BTree segundo a procura binaria e construir um FTree,
+conservando os ramos rejeitados pela procura binaria (passando o Nothing no lado esquerdo do par para a iteracao seguinte e colocando o caso de paragem adequado para ser injetado)
+até encontrar uma árvore Empty onde injeta o novo nodo.
+
+Depois aplica um catamorfismo para converter a FTree numa BTree com o elemento inserido ordenadamente.
+
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{34}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{42}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{insOrd'}\mathrel{=}\bot {}\<[E]%
@@ -1737,17 +1748,6 @@ e retornar essa mesma àrvore para a chamada recursiva.
 \\
 \>[3]{}\hsindent{6}{}\<[9]%
 \>[9]{}\Varid{conquer}\mathrel{=}\Varid{inBTree}\comp \alt{\Varid{outBTree}}{i_2}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{conquer2}\mathrel{=}\Varid{inBTree}\comp \alt{\Varid{outBTree}}{i_2}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{divide2}\;(\Conid{Just}\;\Varid{a},\Conid{Empty})\mathrel{=}i_1\;(\Conid{Node}\;(\Varid{a},(\Conid{Empty},\Conid{Empty}))){}\<[E]%
-\\
-\>[B]{}\Varid{divide2}\;(\Conid{Just}\;\Varid{a},\Conid{Node}\;(\Varid{n},(\Varid{t1},\Varid{t2})))\mid \Varid{a}\leq \Varid{n}\mathrel{=}i_2\;(\Varid{n},((\Conid{Just}\;\Varid{a},\Varid{t1}),(\Conid{Nothing},\Varid{t2}))){}\<[E]%
-\\
-\>[B]{}\hsindent{34}{}\<[34]%
-\>[34]{}\mid \Varid{a}\mathbin{>}\Varid{n}\mathrel{=}i_2\;(\Varid{n},((\Conid{Nothing},\Varid{t1}),(\Conid{Just}\;\Varid{a},\Varid{t2}))){}\<[E]%
-\\
-\>[B]{}\Varid{divide2}\;(\Conid{Nothing},\Varid{p})\mathrel{=}i_1\;(\Varid{p});{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1802,25 +1802,47 @@ e retornar essa mesma àrvore para a chamada recursiva.
 \ColumnHook
 \end{hscode}\resethooks
 
-\subsection*{Splay}
+
+\subsection*{rrot}
+
+Faz uma rotação à direita numa BTree
+
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{rrot}\;\Conid{Empty}\mathrel{=}\Conid{Empty}{}\<[E]%
 \\
 \>[B]{}\Varid{rrot}\;\Varid{t}\mathord{@}(\Conid{Node}\;(\Varid{a},(\Conid{Empty},\Varid{d})))\mathrel{=}\Varid{t}{}\<[E]%
 \\
 \>[B]{}\Varid{rrot}\;(\Conid{Node}\;(\Varid{black},((\Conid{Node}\;(\Varid{red},(\Varid{purple},\Varid{green}))),\Varid{blue})))\mathrel{=}\Conid{Node}\;(\Varid{red},(\Varid{purple},(\Conid{Node}\;(\Varid{black},(\Varid{green},\Varid{blue}))))){}\<[E]%
-\\[\blanklineskip]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{lrot}
+
+Faz uma rotação à esquerda numa BTree
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{lrot}\;\Conid{Empty}\mathrel{=}\Conid{Empty}{}\<[E]%
 \\
 \>[B]{}\Varid{lrot}\;\Varid{t}\mathord{@}(\Conid{Node}\;(\Varid{a},(\Varid{e},\Conid{Empty})))\mathrel{=}\Varid{t}{}\<[E]%
 \\
 \>[B]{}\Varid{lrot}\;(\Conid{Node}\;(\Varid{black},(\Varid{blue},(\Conid{Node}\;(\Varid{red},(\Varid{green},\Varid{purple}))))))\mathrel{=}\Conid{Node}\;(\Varid{red},((\Conid{Node}\;(\Varid{black},(\Varid{blue},\Varid{green})),\Varid{purple}))){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{splay}\mathrel{=}\Varid{cataList}\;\Varid{g}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{Splay}
+
+Aplica um catamorfismo de Listas para recursivamente rodar a arvore de acordo com os valores booleanos
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{splay}\mathrel{=}\cata{\Varid{g}}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{\Varid{id}}}{\Varid{f}}{}\<[E]%
@@ -1836,6 +1858,22 @@ e retornar essa mesma àrvore para a chamada recursiva.
 \>[B]{}\Varid{test}\;(\text{\ttfamily \char34 d\char34},\text{\ttfamily \char34 g\char34})\mathrel{=}\text{\ttfamily \char34 k\char34};{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\Conid{List}\;\Conid{Bool}}
+           \ar[d]_-{\ensuremath{\cata{\Varid{g}}}}
+           \ar[r]_-{\ensuremath{\Varid{outList}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}(\Conid{Bool}\times\Conid{List}\;\Conid{Bool})}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\cata{\Varid{g}}\;^2}}
+\\
+     \ensuremath{{\fun{BTree} \;\Varid{a}}^{\fun{BTree} \;\Varid{a}}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}(\Conid{Bool}\times{\fun{BTree} \;\Varid{a}}^{\fun{BTree} \;\Varid{a}})}
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 3}
 \subsection*{Definições iniciais}
