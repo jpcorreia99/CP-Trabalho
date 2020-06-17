@@ -1122,12 +1122,9 @@ isOrd = p1 . cataBTree g
             f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c) 
             funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
 
-
-
 rrot Empty = Empty
 rrot t@(Node (a,(Empty,d))) = t
 rrot (Node (black,((Node (red,(purple,green))),blue))) = Node(red,(purple,(Node (black,(green,blue)))))
-
 
 lrot Empty = Empty
 lrot t@(Node (a,(e,Empty))) = t
