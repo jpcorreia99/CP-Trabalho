@@ -972,8 +972,8 @@ alterados os nomes ou tipos das funções dadas, mas pode ser adicionado texto e
 outras funções auxiliares que sejam necessárias.
 
 \subsection*{Problema 1}
+\subsection*{Definições auxiliares}
 \begin{code}
-
 data XNat a = Zero a | Succ (XNat a) deriving Show
 inXNat = either Zero Succ
 outXNat (Zero a) = Left a
@@ -988,16 +988,25 @@ hyloXNat a c = cataXNat a . anaXNat c
 codiag = either id id
 tailr = hyloXNat codiag
 while2 p f g = tailr ((g -|- f) . grd (not . p))
+\end{code}
 
+\subsection*{Discollect}
+\begin{code}
 discollect :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
 discollect = cataList g where
   g = either (const []) (uncurry (++) . (f >< id))
     where f (a,l) = map (split (const a)  id) l
 
+\end{code}
+Foi também desenvolvida um versão utilizando o operador bind
+\begin{code}
 discollect2 :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
 discollect2 = (>>= f) 
     where f (a,l) = map (split (const a)  id) l
+\end{code}
 
+\subsection*{Dic\_exp}
+\begin{code}
 dic_exp :: Dict -> [(String,[String])]
 dic_exp = collect . tar
 
@@ -1005,6 +1014,10 @@ tar = cataExp g where
   g = either (singl . (split (const "") id)) (f)
   f (a,b) = map ((++) a >< id) (concat b) 
 
+\end{code}
+
+\subsection*{Dic\_rd}
+\begin{code}
 dic_rd :: String -> Dict -> Maybe [String]
 dic_rd s d = while2 p loopBody exit (s,Just d)
   where p(a,b) = (a /= [] && isJust b)
@@ -1032,8 +1045,10 @@ isJust _ = False
 isLeft (Left _) = True
 isLeft _ = False
 
+\end{code}
 
-
+\subsection*{Dic\_in}
+\begin{code}
 dic_in :: String -> String -> Dict -> Dict
 dic_in p t d = dic_in_aux (Just (traductionToDict (p,t)), d)
 
@@ -1041,20 +1056,11 @@ dic_in p t d = dic_in_aux (Just (traductionToDict (p,t)), d)
 dic_in_aux :: (Maybe (Dict), Dict) -> Dict
 dic_in_aux = anaExp g
   where g(_,Var v) = i1(v)
-        g(Just (Term a b),Term o l)  | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
+        g(Just (Term a b),Term o l) | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
              | (head o == head a) =  recExp (split (const (Just (head b))) id)  (outExp(Term o (insertIfAbsent (head b,l))))
              | otherwise = recExp (split nothing id)  (outExp (Term o l))
         g(Nothing, v) =  recExp (split nothing id) (outExp v)
 
-
-{-
-insertIfPresent :: (Dict,[Dict]) -> [Dict]
-insertIfPresent = hyloSList f g
-  where g (Term a b, ((Term o l):ds)) | (head a == head o) = i1((Term o l):ds)
-              | otherwise = i2(Term o l, (Term a b, ds))
-        g (l, (Var x):ds) = i2 (Var x, (l,ds))
-        g (l,[]) = i1(singl l)
-        f = either id cons-}
 
 insertIfAbsent ((Term o l),((Term a b):ts)) = if (head o == head a) then ((Term a b):ts) else (Term a b):(insertIfAbsent((Term o l),ts))
 insertIfAbsent ((Term o l),[]) =  [(Term o l)]
@@ -1070,18 +1076,26 @@ traductionToDict = anaExp g where
 \end{code}
 
 \subsection*{Problema 2}
-
+\subsection*{MaisDir}
 \begin{code}
 maisDir = cataBTree g
   where g = either (const Nothing) f 
            where f (a,(t1,Nothing)) = Just a
                  f (a,(t1,t2)) = t2
-                 
+
+\end{code}
+
+\subsection*{MaisEsq}
+\begin{code}
 maisEsq = cataBTree g 
   where g = either (const Nothing) f
             where f (a,(Nothing,t2)) = Just a
                   f (a,(t1,t2)) = t1
+\end{code}
 
+
+\subsection*{inOrd}
+\begin{code}
 insOrd' = undefined
 
 insOrd a x = anaBTree f (Just a,x)
@@ -1090,21 +1104,23 @@ insOrd a x = anaBTree f (Just a,x)
                   f (Just a,Node (x,(t1,t2))) | a <= x = i2(x,((Just a,t1),(Nothing,t2)))
                                               | otherwise = i2(x,((Nothing,t1),(Just a,t2)))
                   f (Nothing,Node (x,(t1,t2))) = i2(x,((Nothing,t1),(Nothing,t2)))
+\end{code}
 
 
-
+\subsection*{isOrd}
+\begin{code}
 isOrd' = cataBTree g
   where g = undefined
 
---isOrd ::  (Ord a) => BTree a -> Bool
 isOrd = p1 . cataBTree g 
       where g = either (const (True,Empty)) (split (f2 (funcaoComparacao . Node)) (Node . f))
             f = (id >< (p2 >< p2)) --(a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)
             f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c) 
             funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
+\end{code}
 
-
-
+\subsection*{Splay}
+\begin{code}
 rrot Empty = Empty
 rrot t@(Node (a,(Empty,d))) = t
 rrot (Node (black,((Node (red,(purple,green))),blue))) = Node(red,(purple,(Node (black,(green,blue)))))
@@ -1115,14 +1131,10 @@ lrot t@(Node (a,(e,Empty))) = t
 lrot (Node (black,(blue,(Node (red,(green,purple)))))) = Node(red,((Node (black,(blue,green)),purple)))
 
 
-
-
 splay = cataList g
   where g = either (const id) f
         f(True,l) = rrot . l   
         f(False,l) = lrot . l
-{-            f _ Empty = Empty
-        f (b1,b2) (Node (a,(t1,t2))) = if b1 then b2 t1 else b2 t2-}
   
 \end{code}
 
@@ -1324,18 +1336,22 @@ janela = InWindow
 
 ----- defs auxiliares -------------
 
-testHenrique = Pictures [Translate 0.0 0.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 0.0 80.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 80.0 0.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)]),Translate 80.0 80.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)])]
-
 put  = uncurry Translate 
 
-final = do
+main = do
   r <- generateMatrix 10 10
   display janela white r
 
 generateMatrix :: Int -> Int -> IO Picture
-generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generateTruchet) >>= (return . pictures . zipWith id l)
-  where l = do { x' <- map (80 *) [0..(fromIntegral i)-1]; y' <- map (80 *) [0..(fromIntegral j)-1]; return(put(x',y'))}
-        generateTruchet x = return . either (const truchet1) (const truchet2) $ outNat $ fromInteger x
+generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generateTruchet) 
+                         >>= (return . pictures . zipWith id l)
+  where l = do { x' <- map (80 *) [0..(fromIntegral i)-1];
+                    y' <- map (80 *) [0..(fromIntegral j)-1]; 
+                    return(put(x',y'))}
+
+
+generateTruchet :: Monad m => Integer -> m Picture
+generateTruchet = return . (Cp.cond (==0) (const truchet1) (const truchet2))
 
 
 
