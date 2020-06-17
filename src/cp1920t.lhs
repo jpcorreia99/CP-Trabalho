@@ -1210,9 +1210,9 @@ outBdt:: Bdt a -> Either a (String,(Bdt a, Bdt a))
 outBdt (Dec a)  = i1 a
 outBdt (Query(s,(b1,b2))) = i2 (s,(b1,b2)) 
 
-baseBdt f g h = f -|- (g >< ( h >< h ))  
+baseBdt f g  = f -|- (id >< ( g >< g ))  
 
-recBdt f = baseBdt id id f
+recBdt f = baseBdt id f
 
 cataBdt g = g . (recBdt (cataBdt g)) . outBdt
 
