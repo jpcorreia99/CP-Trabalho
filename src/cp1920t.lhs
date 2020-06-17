@@ -89,6 +89,7 @@
 %format quadrado = "^2"
 %format (expn (a) (n)) = "{" a "}^{" n "}" 
 %format (anaBdt (g)) = "\ana{" g "}"
+%format (cataBTree (g)) = "\cata{" g "}"
 %format joinMonad = "μ"
 
 %---------------------------------------------------------------------------
@@ -181,6 +182,7 @@ o ``kit'' básico, escrito em \Haskell, para realizar o trabalho. Basta executar
 import Cp
 import List  hiding (fac)
 import Nat
+import FTree
 import BTree
 import LTree
 import Probability
@@ -1076,39 +1078,48 @@ traductionToDict = anaExp g where
 \end{code}
 
 \subsection*{Problema 2}
-\subsection*{MaisDir}
+
+\subsection*{maisDir}
+
 \begin{code}
 maisDir = cataBTree g
-  where g = either (const Nothing) f 
-           where f (a,(t1,Nothing)) = Just a
-                 f (a,(t1,t2)) = t2
-
+    where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p2.p2)) . p2 . p2) id)
 \end{code}
 
-\subsection*{MaisEsq}
+\subsection*{maisEsq}
+
 \begin{code}
 maisEsq = cataBTree g 
-  where g = either (const Nothing) f
-            where f (a,(Nothing,t2)) = Just a
-                  f (a,(t1,t2)) = t1
+  where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p1.p2)) . p2 . p2) id)
 \end{code}
 
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |BTree X|
+           \ar[d]_-{|cataBTree (g)|}
+           \ar[r]_-{|outBTree|}
+&
+    |1 + X >< (BTree X)quadrado)|
+           \ar[d]^-{|id + id >< (cataBTree (g)quadrado|}
+\\
+     |1 + X|
+&
+     |1 + X >< BTree X|
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
 
-\subsection*{inOrd}
 \begin{code}
+
 insOrd' = undefined
 
-insOrd a x = anaBTree f (Just a,x)
-            where f (Nothing,Empty) = i1()
-                  f (Just a,Empty) = i2(a,((Nothing,Empty),(Nothing,Empty)))
-                  f (Just a,Node (x,(t1,t2))) | a <= x = i2(x,((Just a,t1),(Nothing,t2)))
-                                              | otherwise = i2(x,((Nothing,t1),(Just a,t2)))
-                  f (Nothing,Node (x,(t1,t2))) = i2(x,((Nothing,t1),(Nothing,t2)))
-\end{code}
+insOrd a x = hyloFTree (conquer) (divide) (Just a,x)
+  where divide (Just a,Empty) = i1(Node(a,(Empty,Empty)))
+        divide (Just a,Node (n,(t1,t2))) | a <= n = i2(n,((Just a,t1),(Nothing,t2)))
+                                         | a > n = i2(n,((Nothing,t1),(Just a,t2)))
+        divide (Nothing,p) = i1(p);
+        conquer = inBTree . either (outBTree) i2
 
-
-\subsection*{isOrd}
-\begin{code}
 isOrd' = cataBTree g
   where g = undefined
 
@@ -1129,7 +1140,6 @@ rrot (Node (black,((Node (red,(purple,green))),blue))) = Node(red,(purple,(Node 
 lrot Empty = Empty
 lrot t@(Node (a,(e,Empty))) = t
 lrot (Node (black,(blue,(Node (red,(green,purple)))))) = Node(red,((Node (black,(blue,green)),purple)))
-
 
 splay = cataList g
   where g = either (const id) f
@@ -1358,6 +1368,14 @@ generateTruchet = return . (Cp.cond (==0) (const truchet1) (const truchet2))
 
 -------------------------------------------------
 \end{code}
+
+
+    \begin{figure}\centering
+    \includegraphics[scale=1]{images/mosaico.png}
+    \caption{Mosaico gerado pelo grupo}
+    \label{fig:mosaico}
+    \end{figure}
+    
 
 %----------------- Fim do anexo com soluções dos alunos ------------------------%
 

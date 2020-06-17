@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2712dc64f0d7a084579b3bb71c5c189ca40dd0de1df3d2e528cfa2527ea988fc
+-- hash: c437d678b514d64a904fb39d1489d32fe45bf805565afb8f40411b3afc8cc812
 
 name:           cp
 version:        0.1.0.0
@@ -29,7 +29,6 @@ library
   exposed-modules:
       BTree
       Cp
-      Dic
       Exp
       FTree
       List
@@ -38,7 +37,6 @@ library
       Nat
       Probability
       Show
-      SList
       St
   other-modules:
       Paths_cp
