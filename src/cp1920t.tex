@@ -1804,6 +1804,7 @@ Foi também desenvolvida um versão utilizando o operador bind
 \subsection*{Definições iniciais}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{14}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{17}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{inBdt}\mathbin{::}\Varid{a}+(\Conid{String},(\Conid{Bdt}\;\Varid{a},\Conid{Bdt}\;\Varid{a}))\to \Conid{Bdt}\;\Varid{a}{}\<[E]%
@@ -1817,9 +1818,10 @@ Foi também desenvolvida um versão utilizando o operador bind
 \\
 \>[B]{}\Varid{outBdt}\;(\Conid{Query}\;(\Varid{s},(\Varid{b1},\Varid{b2})))\mathrel{=}i_2\;(\Varid{s},(\Varid{b1},\Varid{b2})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{baseBdt}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\Varid{f}+(\Varid{g}\times(\Varid{h}\times\Varid{h})){}\<[E]%
+\>[B]{}\Varid{baseBdt}\;\Varid{f}\;\Varid{g}{}\<[14]%
+\>[14]{}\mathrel{=}\Varid{f}+(\Varid{id}\times(\Varid{g}\times\Varid{g})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{recBdt}\;\Varid{f}\mathrel{=}\Varid{baseBdt}\;\Varid{id}\;\Varid{id}\;\Varid{f}{}\<[E]%
+\>[B]{}\Varid{recBdt}\;\Varid{f}\mathrel{=}\Varid{baseBdt}\;\Varid{id}\;\Varid{f}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{cataBdt}\;\Varid{g}\mathrel{=}\Varid{g}\comp (\Varid{recBdt}\;(\Varid{cataBdt}\;\Varid{g}))\comp \Varid{outBdt}{}\<[E]%
 \\[\blanklineskip]%
