@@ -1193,9 +1193,6 @@ splay = cataList g
         f (True,l) = rrot . l   
         f (False,l) = lrot . l
 
-splay1 (True,l) = rrot . l   
-
-test ("d","g") = "k";
 \end{code}
 
 \subsection*{Problema 3}
