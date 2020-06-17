@@ -89,6 +89,7 @@
 %format quadrado = "^2"
 %format (expn (a) (n)) = "{" a "}^{" n "}" 
 %format (anaBdt (g)) = "\ana{" g "}"
+%format (cataBTree (g)) = "\cata{" g "}"
 %format joinMonad = "μ"
 
 %---------------------------------------------------------------------------
@@ -973,8 +974,8 @@ alterados os nomes ou tipos das funções dadas, mas pode ser adicionado texto e
 outras funções auxiliares que sejam necessárias.
 
 \subsection*{Problema 1}
+\subsection*{Definições auxiliares}
 \begin{code}
-
 data XNat a = Zero a | Succ (XNat a) deriving Show
 inXNat = either Zero Succ
 outXNat (Zero a) = Left a
@@ -989,16 +990,25 @@ hyloXNat a c = cataXNat a . anaXNat c
 codiag = either id id
 tailr = hyloXNat codiag
 while2 p f g = tailr ((g -|- f) . grd (not . p))
+\end{code}
 
+\subsection*{Discollect}
+\begin{code}
 discollect :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
 discollect = cataList g where
   g = either (const []) (uncurry (++) . (f >< id))
     where f (a,l) = map (split (const a)  id) l
 
+\end{code}
+Foi também desenvolvida um versão utilizando o operador bind
+\begin{code}
 discollect2 :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
 discollect2 = (>>= f) 
     where f (a,l) = map (split (const a)  id) l
+\end{code}
 
+\subsection*{Dic\_exp}
+\begin{code}
 dic_exp :: Dict -> [(String,[String])]
 dic_exp = collect . tar
 
@@ -1006,6 +1016,10 @@ tar = cataExp g where
   g = either (singl . (split (const "") id)) (f)
   f (a,b) = map ((++) a >< id) (concat b) 
 
+\end{code}
+
+\subsection*{Dic\_rd}
+\begin{code}
 dic_rd :: String -> Dict -> Maybe [String]
 dic_rd s d = while2 p loopBody exit (s,Just d)
   where p(a,b) = (a /= [] && isJust b)
@@ -1033,8 +1047,10 @@ isJust _ = False
 isLeft (Left _) = True
 isLeft _ = False
 
+\end{code}
 
-
+\subsection*{Dic\_in}
+\begin{code}
 dic_in :: String -> String -> Dict -> Dict
 dic_in p t d = dic_in_aux (Just (traductionToDict (p,t)), d)
 
@@ -1042,20 +1058,11 @@ dic_in p t d = dic_in_aux (Just (traductionToDict (p,t)), d)
 dic_in_aux :: (Maybe (Dict), Dict) -> Dict
 dic_in_aux = anaExp g
   where g(_,Var v) = i1(v)
-        g(Just (Term a b),Term o l)  | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
+        g(Just (Term a b),Term o l) | (o == [] || o == " ") = recExp (split (const (Just (Term a b))) id)  (outExp(Term o (insertIfAbsent (Term a b,l))))
              | (head o == head a) =  recExp (split (const (Just (head b))) id)  (outExp(Term o (insertIfAbsent (head b,l))))
              | otherwise = recExp (split nothing id)  (outExp (Term o l))
         g(Nothing, v) =  recExp (split nothing id) (outExp v)
 
-
-{-
-insertIfPresent :: (Dict,[Dict]) -> [Dict]
-insertIfPresent = hyloSList f g
-  where g (Term a b, ((Term o l):ds)) | (head a == head o) = i1((Term o l):ds)
-              | otherwise = i2(Term o l, (Term a b, ds))
-        g (l, (Var x):ds) = i2 (Var x, (l,ds))
-        g (l,[]) = i1(singl l)
-        f = either id cons-}
 
 insertIfAbsent ((Term o l),((Term a b):ts)) = if (head o == head a) then ((Term a b):ts) else (Term a b):(insertIfAbsent((Term o l),ts))
 insertIfAbsent ((Term o l),[]) =  [(Term o l)]
@@ -1083,7 +1090,7 @@ maisDir = cataBTree g
 
 \begin{code}
 maisEsq = cataBTree g 
-  where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p1.p2)) . p2 . p2) id)
+  where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p1.p2)) . p1 . p2) id)
 \end{code}
 
 \begin{eqnarray*}
@@ -1093,7 +1100,7 @@ maisEsq = cataBTree g
            \ar[r]_-{|outBTree|}
 &
     |1 + X >< (BTree X)quadrado)|
-           \ar[d]^-{|id + (recBTree (cataBTree (g))|}
+           \ar[d]^-{|id + id >< (cataBTree (g)quadrado|}
 \\
      |1 + X|
 &
@@ -1102,6 +1109,8 @@ maisEsq = cataBTree g
 }
 \end{eqnarray*}
 
+
+\subsection*{insOrd}
 \begin{code}
 
 insOrd' = undefined
@@ -1112,6 +1121,10 @@ insOrd a x = hyloFTree (conquer) (divide) (Just a,x)
                                          | a > n = i2(n,((Nothing,t1),(Just a,t2)))
         divide (Nothing,p) = i1(p);
         conquer = inBTree . either (outBTree) i2
+\end{code}
+
+\subsection*{isOrd}
+\begin{code}
 
 isOrd' = cataBTree g
   where g = undefined
@@ -1121,7 +1134,10 @@ isOrd = p1 . cataBTree g
             f = (id >< (p2 >< p2)) --(a, (Bool, BTree a), (Bool, BTree a)) -> (a,BTree a, BTree a)
             f2 p (a,(b,c)) = p (f (a,(b,c)) ) && p1(b) && p1(c) 
             funcaoComparacao (Node(a,(t1,t2))) = (either (const True) ((<= a).p1) (outBTree t1)) && (either (const True) ((>= a).p1) (outBTree t2))
+\end{code}
 
+\subsection*{Splay}
+\begin{code}
 rrot Empty = Empty
 rrot t@(Node (a,(Empty,d))) = t
 rrot (Node (black,((Node (red,(purple,green))),blue))) = Node(red,(purple,(Node (black,(green,blue)))))
@@ -1134,13 +1150,11 @@ splay = cataList g
   where g = either (const id) f
         f(True,l) = rrot . l   
         f(False,l) = lrot . l
-{-            f _ Empty = Empty
-        f (b1,b2) (Node (a,(t1,t2))) = if b1 then b2 t1 else b2 t2-}
   
 \end{code}
 
 \subsection*{Problema 3}
-
+\subsection*{Definições iniciais}
 \begin{code}
 
 inBdt:: Either a (String,(Bdt a, Bdt a)) -> Bdt a
@@ -1150,14 +1164,16 @@ outBdt:: Bdt a -> Either a (String,(Bdt a, Bdt a))
 outBdt (Dec a)  = i1 a
 outBdt (Query(s,(b1,b2))) = i2 (s,(b1,b2)) 
 
-baseBdt f g = id -|- (f >< ( g >< g ))  
+baseBdt f g h = f -|- (g >< ( h >< h ))  
 
-recBdt f = id -|- (id >< (f >< f )) 
+recBdt f = baseBdt id id f
 
 cataBdt g = g . (recBdt (cataBdt g)) . outBdt
 
 anaBdt g = inBdt . (recBdt (anaBdt g)) . g 
 \end{code}
+
+\subsection*{Diagrama do Anamorfismo}
 
 \begin{eqnarray*}
 \xymatrix@@C=2cm{
@@ -1174,7 +1190,7 @@ anaBdt g = inBdt . (recBdt (anaBdt g)) . g
            \ar[u]^{|id+(id ><(anaBdt (g)) quadrado)|}
 }
 \end{eqnarray*}
-\subsection*{extLTree}
+\subsection*{ExtLTree}
 A diferença em termos estruturais entre os dois tipos de dados é a presença da String nos nodos, informação que irá ser removida na transformação para LTree
 \begin{code}
 
@@ -1184,7 +1200,7 @@ extLTree = cataBdt g where
   g = either (Leaf) (Fork . p2)
 \end{code}
 
-\subsection*{navLTree}
+\subsection*{NavLTree}
 
 Versão pointfree
 
@@ -1221,18 +1237,18 @@ navLTreePointWise = cataLTree g
 \end{eqnarray*}
 
 \subsection*{Problema 4}
-\subsection*{bnavLTree}
+\subsection*{BnavLTree}
 Versão pointfree
 \begin{code}
 
 y = Node(True, (Node(True,(Empty,Empty)),Empty))
 
-outNode (Node(a,(b,c))) = (a,(b,c))
 
 bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (g (l,r)) (h (l,r))))
     where f = (const . Leaf)
           g (l,r) = Fork . split l r
           h (l,r) = Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode)
+          outNode (Node(a,(b,c))) = (a,(b,c))
 
 \end{code}
 Versão pointwise
@@ -1260,7 +1276,7 @@ bnavLTreePointWise = cataLTree g
 }
 \end{eqnarray*}
 
-\subsection*{pbnavLTree}
+\subsection*{PbnavLTree}
 Esta função irá percorrer uma LTree representante de uma situação onde em que a decisão depende de vários 
 fatores que são testados sucessivamente. A probabilidade de ocorrência, ou não, de cada fator é representada por 
 \textbf{Dist Bool}. Devido à natureza sucessiva destes acontecimentos, as suas probabilidades estão organizadas numa
@@ -1284,17 +1300,6 @@ pbnavLTree = cataLTree g
   where g = either (\a _ -> return (Leaf a)) f where
             f (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
             f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
-xxx (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
-
-
-
-x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
-z = Node(D[(True,0.6),(False,0.4)],(Empty,Empty))
-
-anita = Query("2a feira?", (Query("chuva na ida", (Dec "precisa", Query("chuva no regresso?", (Dec "precisa", Dec "nao precisa")))), Dec "nao precisa"))
-testePaulo1 = extLTree anita
-
-btreePaulo = Node(D[(True, 0.8) , (False, 0.2)], (Empty, Empty))
 
 
 \end{code}
@@ -1337,24 +1342,36 @@ janela = InWindow
 
 ----- defs auxiliares -------------
 
-testHenrique = Pictures [Translate 0.0 0.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 0.0 80.0 (Pictures [Translate 0.0 80.0 (Arc (-90.0) 0.0 40.0),Translate 80.0 0.0 (Arc 90.0 180.0 40.0)]),Translate 80.0 0.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)]),Translate 80.0 80.0 (Pictures [Translate 0.0 0.0 (Arc 0.0 90.0 40.0),Translate 80.0 80.0 (Arc 180.0 (-90.0) 40.0)])]
-
 put  = uncurry Translate 
 
-final = do
+main = do
   r <- generateMatrix 10 10
   display janela white r
 
 generateMatrix :: Int -> Int -> IO Picture
-generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generateTruchet) >>= (return . pictures . zipWith id l)
-  where l = do { x' <- map (80 *) [0..(fromIntegral i)-1]; y' <- map (80 *) [0..(fromIntegral j)-1]; return(put(x',y'))}
-        generateTruchet x = return . either (const truchet1) (const truchet2) $ outNat $ fromInteger x
+generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generateTruchet) 
+                         >>= (return . pictures . zipWith id l)
+  where l = do { x' <- map (80 *) [0..(fromIntegral i)-1];
+                    y' <- map (80 *) [0..(fromIntegral j)-1]; 
+                    return(put(x',y'))}
+
+
+generateTruchet :: Monad m => Integer -> m Picture
+generateTruchet = return . (Cp.cond (==0) (const truchet1) (const truchet2))
 
 
 
 
 -------------------------------------------------
 \end{code}
+
+
+    \begin{figure}\centering
+    \includegraphics[scale=1]{images/mosaico.png}
+    \caption{Mosaico gerado pelo grupo}
+    \label{fig:mosaico}
+    \end{figure}
+    
 
 %----------------- Fim do anexo com soluções dos alunos ------------------------%
 
