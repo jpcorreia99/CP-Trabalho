@@ -1017,16 +1017,6 @@ codiag = either id id
 tailr = hyloXNat codiag
 while2 p f g = tailr ((g -|- f) . grd (not . p))
 
-
-data SList a b = Stl b | Cons a (SList a b) deriving Show
-
-inSList = either Stl (uncurry Cons)
-
-outSList (Stl b)      = i1 b
-outSList (Cons a s) = i2 (a,s)
-baseSList z x y = z -|- x >< y
-recSList f = baseSList id id f
-anaSList g = inSList . (recSList (anaSList g) ) . g
 \end{code}
 
 \subsection*{Discollect}
@@ -1087,37 +1077,32 @@ isLeft _ = False
 \subsection*{Dic\_in}
 \begin{code}
 dic_in :: String -> String -> Dict -> Dict
-dic_in p t d = hyloExp conquer divide (Just (traductionToSList (p,t)), d) where
-    conquer = inExp . either outExp i2
-    divide (Nothing, g) = i1(g)
-    divide (_,Var l) = i1(Var l)
-    divide (Just (Cons x xs),Term o l) | (o == []) =  i2 $ (o,divide_aux (Cons x xs) (False,l))
-          | (x == head o) = i2 $ (o,divide_aux xs (False,l))
-                                        | otherwise = i1(Term o l)
-     
-
-traductionToSList :: (String,String) -> SList Char String
-traductionToSList = anaSList g where
-  g([],t) = i1(t);
-  g(p:ps,t) = i2(p,(ps,t))
-
-divide_aux :: (SList Char String) -> (Bool,[Dict]) -> [(Maybe (SList Char String),Dict)]
-divide_aux x (bool,[]) = if (not bool) 
-                         then singl . split (Just . const x) id . either Var (uncurry Term . (singl >< (const []))) $ outSList x 
-                         else []
-divide_aux x (bool,((Var v):ts)) = ((Nothing,(Var v)) : (divide_aux x (test_bool,ts)))
-                        where test_bool =  either (v ==) false $ outSList x 
-divide_aux x (bool,((Term o l):ts)) | (o == []) = (Nothing,Term o l) : (divide_aux x (bool,ts))
-                                    | (not bool && (either false ((== head o) .p1) $ outSList x)) = 
-                                      (Just x,Term o l) : (divide_aux x (True,ts))
-                                    | otherwise = (Nothing,(Term o l)) : (divide_aux x (bool,ts))
-
+dic_in p t d = hyloExp conquer divide (Just $ traductionToDict (p,t), d) where
+        conquer = inExp . either outExp i2
+        divide (Nothing, g) = i1(g)
+        divide (_,Var l) = i1(Var l)
+        divide (Just (Term x xs),Term o l) | (o == []) =  i2 $ (o,divide_aux (Term x xs) (False,l))
+             | (head x == head o) = i2 $ (o,divide_aux (head xs) (False,l))
+                                           | otherwise = i1(Term o l)
 
 traductionToDict :: (String,String) -> Dict
 traductionToDict = anaExp g where
-       g([],t) = i1(t);
-       g(p:ps,t) = i2(singl p, singl (ps,t))
+  g([],t) = i1(t)
+  g(p:ps,t) = i2(singl p, singl (ps,t))
 
+
+-- x -> SList que representa o Dict com a traduçao a ser inserida
+--Bool -> se o Dict com a mesma primeira letra ou a mesma traducao ja foi encontrada 
+divide_aux :: Dict -> (Bool,[Dict]) -> [(Maybe Dict,Dict)]
+divide_aux x (bool,[]) = if (not bool) 
+                         then singl (Nothing,x)
+                         else []
+divide_aux x (bool,((Var v):ts)) = ((Nothing,(Var v)) : (divide_aux x (test_bool,ts)))
+                        where test_bool =  either (v ==) false $ outExp x 
+divide_aux x (bool,((Term o l):ts)) | (o == []) = (Nothing,Term o l) : (divide_aux x (bool,ts))
+                                    | (not bool && (either false ((== head o) . head .p1) $ outExp x)) = 
+                                      (Just x,Term o l) : (divide_aux x (True,ts))
+                                    | otherwise = (Nothing,(Term o l)) : (divide_aux x (bool,ts))
 
 \end{code}
 
@@ -1252,7 +1237,6 @@ splay = cataList g
   where g = either (const id) f
         f (True,l) = rrot . l   
         f (False,l) = lrot . l
-
 \end{code}
 
 \subsection*{Problema 3}
