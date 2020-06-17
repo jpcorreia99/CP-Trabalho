@@ -1544,39 +1544,65 @@ insertIfPresent = hyloSList f g
 
 \subsection*{Problema 2}
 
+\subsection*{maisDir}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{maisDir}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\Varid{nothing}}{(\bind )\;(\p2\comp \p2)\;\Varid{return}}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{maisEsq}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{19}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{maisEsq}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\Varid{nothing}}{\Varid{f}}{}\<[E]%
+\\
+\>[3]{}\hsindent{10}{}\<[13]%
+\>[13]{}\mathbf{where}\;\Varid{f}\;(\Varid{a},(\Conid{Nothing},\Varid{t2}))\mathrel{=}\Varid{return}\;\Varid{a}{}\<[E]%
+\\
+\>[13]{}\hsindent{6}{}\<[19]%
+\>[19]{}\Varid{f}\;(\Varid{a},(\Varid{t1},\Varid{t2}))\mathrel{=}\Varid{t1}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\fun{BTree} \;\Conid{X}}
+           \ar[d]_-{\ensuremath{\Varid{cataBTree}\;(\Varid{g})}}
+           \ar[r]_-{\ensuremath{\Varid{outBTree}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\Conid{X}\times(\fun{BTree} \;\Conid{X})\;^2)}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}(\Varid{recBTree}\;(\Varid{cataBTree}\;(\Varid{g}))}}
+\\
+     \ensuremath{\mathrm{1}\mathbin{+}\Conid{X}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\Conid{X}\times\fun{BTree} \;\Conid{X}}
+           \ar[l]^-{g}
+}
+\end{eqnarray*}
+
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{7}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{12}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{13}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{18}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{19}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{47}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{maisDir}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{\Conid{Nothing}}}{\Varid{f}}{}\<[E]%
-\\
-\>[3]{}\hsindent{9}{}\<[12]%
-\>[12]{}\mathbf{where}\;\Varid{f}\;(\Varid{a},(\Varid{t1},\Conid{Nothing}))\mathrel{=}\Conid{Just}\;\Varid{a}{}\<[E]%
-\\
-\>[12]{}\hsindent{6}{}\<[18]%
-\>[18]{}\Varid{f}\;(\Varid{a},(\Varid{t1},\Varid{t2}))\mathrel{=}\Varid{t2}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{maisEsq}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\underline{\Conid{Nothing}}}{\Varid{f}}{}\<[E]%
-\\
-\>[3]{}\hsindent{10}{}\<[13]%
-\>[13]{}\mathbf{where}\;\Varid{f}\;(\Varid{a},(\Conid{Nothing},\Varid{t2}))\mathrel{=}\Conid{Just}\;\Varid{a}{}\<[E]%
-\\
-\>[13]{}\hsindent{6}{}\<[19]%
-\>[19]{}\Varid{f}\;(\Varid{a},(\Varid{t1},\Varid{t2}))\mathrel{=}\Varid{t1}{}\<[E]%
-\\[\blanklineskip]%
 \>[B]{}\Varid{insOrd'}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{insOrd}\;\Varid{a}\;\Varid{x}\mathrel{=}\Varid{anaBTree}\;\Varid{f}\;(\Conid{Just}\;\Varid{a},\Varid{x}){}\<[E]%
@@ -1601,8 +1627,6 @@ insertIfPresent = hyloSList f g
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mbox{\onelinecomment isOrd ::  (Ord a) => BTree a -> Bool}{}\<[E]%
-\\
 \>[B]{}\Varid{isOrd}\mathrel{=}\p1\comp \Varid{cataBTree}\;\Varid{g}{}\<[E]%
 \\
 \>[B]{}\hsindent{7}{}\<[7]%
