@@ -1132,7 +1132,7 @@ maisDir = cataBTree g
 
 \begin{code}
 maisEsq = cataBTree g 
-  where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p1.p2)) . p2 . p2) id)
+  where g = either (nothing) $ Cp.ap . (split (maybe (return . p1) (const (p1.p2)) . p1 . p2) id)
 \end{code}
 
 \begin{eqnarray*}
@@ -1183,7 +1183,6 @@ isOrd = p1 . cataBTree g
 rrot Empty = Empty
 rrot t@(Node (a,(Empty,d))) = t
 rrot (Node (black,((Node (red,(purple,green))),blue))) = Node(red,(purple,(Node (black,(green,blue)))))
-
 
 lrot Empty = Empty
 lrot t@(Node (a,(e,Empty))) = t
