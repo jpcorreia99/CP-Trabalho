@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.8)  17 JUN 2020 12:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.8)  17 JUN 2020 13:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -505,11 +505,7 @@ LaTeX Info: Redefining \addtolength on input line 81.
 
 
 Writing index file cp1920t.idx
-(./cp1920t.aux
-
-LaTeX Warning: Label `fig:tiles' multiply defined.
-
-)
+(./cp1920t.aux)
 \openout1 = `cp1920t.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 297.
@@ -1011,139 +1007,102 @@ Overfull \hbox (188.26671pt too wide) in paragraph at lines 1513--1570
  <xymatrix 2x2 194>
 \openout5 = `cp1920t.ptb'.
 
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
-
-Overfull \hbox (56.19887pt too wide) in paragraph at lines 1616--1662
- [][][][] 
- []
-
 \openout5 = `cp1920t.ptb'.
 
 
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
+Overfull \hbox (56.19887pt too wide) in paragraph at lines 1646--1671
  [][] 
  []
 
 
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
- [][] 
- []
-
-
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
- [][] 
- []
-
-
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
- [][] 
- []
-
-
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
- [][] 
- []
-
-
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
- [][] 
- []
-
-
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
- [][] 
- []
-
-
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
+Overfull \hbox (56.19887pt too wide) in paragraph at lines 1646--1671
  [][][][] 
  []
 
 
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
+Overfull \hbox (56.19887pt too wide) in paragraph at lines 1646--1671
+ [][] 
+ []
+
+
+Overfull \hbox (56.19887pt too wide) in paragraph at lines 1646--1671
  [][][][] 
  []
 
 
-Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
+Overfull \hbox (56.19887pt too wide) in paragraph at lines 1646--1671
+ [][][][] 
+ []
+
+
+Overfull \hbox (56.19887pt too wide) in paragraph at lines 1646--1671
+ [][][][] 
+ []
+
+
+Overfull \hbox (56.19887pt too wide) in paragraph at lines 1646--1671
  [][][][] 
  []
 
 [15]
 \openout5 = `cp1920t.ptb'.
 
- <xymatrix 2x2 191>
-\openout5 = `cp1920t.ptb'.
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][][][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][][][] 
+ []
+
+
+Overfull \hbox (36.27766pt too wide) in paragraph at lines 1674--1702
+ [][][][] 
+ []
 
 \openout5 = `cp1920t.ptb'.
 
+<xymatrix 2x2 191>
 \openout5 = `cp1920t.ptb'.
 
- <xymatrix 2x2 194> [16]
+ [16]
 \openout5 = `cp1920t.ptb'.
 
 \openout5 = `cp1920t.ptb'.
@@ -1153,96 +1112,102 @@ Overfull \hbox (36.27766pt too wide) in paragraph at lines 1665--1693
 
 \openout5 = `cp1920t.ptb'.
 
+ <xymatrix 2x2 194>
+\openout5 = `cp1920t.ptb'.
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+ [17]
+\openout5 = `cp1920t.ptb'.
+
+
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][][][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][][][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][][][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][] 
  []
 
 
-Overfull \hbox (382.85307pt too wide) in paragraph at lines 1895--1923
+Overfull \hbox (382.85307pt too wide) in paragraph at lines 1907--1935
  [][] 
  []
 
-[17] <xymatrix
+<xymatrix
 ! Xy-pic error: illegal <coord> (_): illegal [...] target form.
 \xyerror@ ...#2}\fi \errmessage {Xy-pic error: #1}
                                                   }
-l.1942 }
+l.1954 }
         
-? R
+? r
 OK, entering \nonstopmode...
 2x2
 ! Xy-pic error: illegal <coord> (_): illegal [...] target form.
 \xyerror@ ...#2}\fi \errmessage {Xy-pic error: #1}
                                                   }
-l.1942 }
+l.1954 }
         
 See the Xy-pic manual for further information.
 
 ! Xy-pic error: illegal <coord> (_): illegal [...] target form.
 \xyerror@ ...#2}\fi \errmessage {Xy-pic error: #1}
                                                   }
-l.1942 }
+l.1954 }
         
 See the Xy-pic manual for further information.
 
 196>
 \openout5 = `cp1920t.ptb'.
 
-<images/mosaico.png, id=264, 437.38406pt x 436.63126pt>
+<images/mosaico.png, id=268, 437.38406pt x 436.63126pt>
 File: images/mosaico.png Graphic file (type png)
 <use images/mosaico.png>
-Package pdftex.def Info: images/mosaico.png  used on input line 2018.
+Package pdftex.def Info: images/mosaico.png  used on input line 2030.
 (pdftex.def)             Requested size: 437.38298pt x 436.63019pt.
 
 No file cp1920t.ind.
 No file cp1920t.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2036.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2048.
 [18] [19 <./images/mosaico.png (PNG copy)>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2036.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2048.
  (./cp1920t.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2036.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2036.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2048.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2048.
 
 Package rerunfilecheck Info: File `cp1920t.out' has not changed.
 (rerunfilecheck)             Checksum: 628570B73880F7F6B343CF9F839CDB98;365.
@@ -1250,15 +1215,12 @@ Package rerunfilecheck Info: File `cp1920t.out' has not changed.
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: There were multiply-defined labels.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2036.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2048.
  ) 
 Here is how much of TeX's memory you used:
- 13274 strings out of 492167
- 187970 string characters out of 6131559
- 360017 words of memory out of 5000000
+ 13278 strings out of 492167
+ 188014 string characters out of 6131559
+ 360036 words of memory out of 5000000
  17271 multiletter control sequences out of 15000+600000
  36967 words of font info for 111 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1283,10 +1245,10 @@ exmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-dist/fonts/type1
 mf-dist/fonts/type1/urw/palatino/uplri8a.pfb></usr/share/texmf-dist/fonts/type1
 /public/xypic/xyatip10.pfb></usr/share/texmf-dist/fonts/type1/public/xypic/xybt
 ip10.pfb>
-Output written on cp1920t.pdf (19 pages, 639098 bytes).
+Output written on cp1920t.pdf (19 pages, 639373 bytes).
 PDF statistics:
- 371 PDF objects out of 1000 (max. 8388607)
- 308 compressed objects within 4 object streams
- 85 named destinations out of 1000 (max. 500000)
+ 375 PDF objects out of 1000 (max. 8388607)
+ 312 compressed objects within 4 object streams
+ 89 named destinations out of 1000 (max. 500000)
  89 words of extra memory for PDF output out of 10000 (max. 10000000)
 

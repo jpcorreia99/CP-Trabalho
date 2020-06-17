@@ -1109,6 +1109,8 @@ maisEsq = cataBTree g
 }
 \end{eqnarray*}
 
+
+\subsection*{insOrd}
 \begin{code}
 
 insOrd' = undefined
@@ -1119,6 +1121,10 @@ insOrd a x = hyloFTree (conquer) (divide) (Just a,x)
                                          | a > n = i2(n,((Nothing,t1),(Just a,t2)))
         divide (Nothing,p) = i1(p);
         conquer = inBTree . either (outBTree) i2
+\end{code}
+
+\subsection*{isOrd}
+\begin{code}
 
 isOrd' = cataBTree g
   where g = undefined
@@ -1149,7 +1155,7 @@ splay = cataList g
 \end{code}
 
 \subsection*{Problema 3}
-
+\subsection*{Definições iniciais}
 \begin{code}
 
 inBdt:: Either a (String,(Bdt a, Bdt a)) -> Bdt a
@@ -1159,14 +1165,16 @@ outBdt:: Bdt a -> Either a (String,(Bdt a, Bdt a))
 outBdt (Dec a)  = i1 a
 outBdt (Query(s,(b1,b2))) = i2 (s,(b1,b2)) 
 
-baseBdt f g = id -|- (f >< ( g >< g ))  
+baseBdt f g h = f -|- (g >< ( h >< h ))  
 
-recBdt f = id -|- (id >< (f >< f )) 
+recBdt f = baseBdt id id f
 
 cataBdt g = g . (recBdt (cataBdt g)) . outBdt
 
 anaBdt g = inBdt . (recBdt (anaBdt g)) . g 
 \end{code}
+
+\subsection*{Diagrama do Anamorfismo}
 
 \begin{eqnarray*}
 \xymatrix@@C=2cm{
@@ -1183,7 +1191,7 @@ anaBdt g = inBdt . (recBdt (anaBdt g)) . g
            \ar[u]^{|id+(id ><(anaBdt (g)) quadrado)|}
 }
 \end{eqnarray*}
-\subsection*{extLTree}
+\subsection*{ExtLTree}
 A diferença em termos estruturais entre os dois tipos de dados é a presença da String nos nodos, informação que irá ser removida na transformação para LTree
 \begin{code}
 
@@ -1193,7 +1201,7 @@ extLTree = cataBdt g where
   g = either (Leaf) (Fork . p2)
 \end{code}
 
-\subsection*{navLTree}
+\subsection*{NavLTree}
 
 Versão pointfree
 
@@ -1230,18 +1238,18 @@ navLTreePointWise = cataLTree g
 \end{eqnarray*}
 
 \subsection*{Problema 4}
-\subsection*{bnavLTree}
+\subsection*{BnavLTree}
 Versão pointfree
 \begin{code}
 
 y = Node(True, (Node(True,(Empty,Empty)),Empty))
 
-outNode (Node(a,(b,c))) = (a,(b,c))
 
 bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (g (l,r)) (h (l,r))))
     where f = (const . Leaf)
           g (l,r) = Fork . split l r
           h (l,r) = Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode)
+          outNode (Node(a,(b,c))) = (a,(b,c))
 
 \end{code}
 Versão pointwise
@@ -1269,7 +1277,7 @@ bnavLTreePointWise = cataLTree g
 }
 \end{eqnarray*}
 
-\subsection*{pbnavLTree}
+\subsection*{PbnavLTree}
 Esta função irá percorrer uma LTree representante de uma situação onde em que a decisão depende de vários 
 fatores que são testados sucessivamente. A probabilidade de ocorrência, ou não, de cada fator é representada por 
 \textbf{Dist Bool}. Devido à natureza sucessiva destes acontecimentos, as suas probabilidades estão organizadas numa
@@ -1293,17 +1301,6 @@ pbnavLTree = cataLTree g
   where g = either (\a _ -> return (Leaf a)) f where
             f (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
             f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
-xxx (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
-
-
-
-x = Fork (Leaf "Precisa",Fork (Leaf "Precisa",Leaf "N precisa"))
-z = Node(D[(True,0.6),(False,0.4)],(Empty,Empty))
-
-anita = Query("2a feira?", (Query("chuva na ida", (Dec "precisa", Query("chuva no regresso?", (Dec "precisa", Dec "nao precisa")))), Dec "nao precisa"))
-testePaulo1 = extLTree anita
-
-btreePaulo = Node(D[(True, 0.8) , (False, 0.2)], (Empty, Empty))
 
 
 \end{code}

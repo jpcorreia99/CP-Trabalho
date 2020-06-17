@@ -1613,12 +1613,12 @@ Foi também desenvolvida um versão utilizando o operador bind
 }
 \end{eqnarray*}
 
+
+\subsection*{insOrd}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{7}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{42}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{insOrd'}\mathrel{=}\bot {}\<[E]%
@@ -1639,7 +1639,16 @@ Foi também desenvolvida um versão utilizando o operador bind
 \\
 \>[3]{}\hsindent{6}{}\<[9]%
 \>[9]{}\Varid{conquer}\mathrel{=}\Varid{inBTree}\comp \alt{\Varid{outBTree}}{i_2}{}\<[E]%
-\\[\blanklineskip]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{isOrd}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{7}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{isOrd'}\mathrel{=}\cata{\Varid{g}}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
@@ -1693,7 +1702,7 @@ Foi também desenvolvida um versão utilizando o operador bind
 \end{hscode}\resethooks
 
 \subsection*{Problema 3}
-
+\subsection*{Definições iniciais}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{17}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -1709,15 +1718,17 @@ Foi também desenvolvida um versão utilizando o operador bind
 \\
 \>[B]{}\Varid{outBdt}\;(\Conid{Query}\;(\Varid{s},(\Varid{b1},\Varid{b2})))\mathrel{=}i_2\;(\Varid{s},(\Varid{b1},\Varid{b2})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{baseBdt}\;\Varid{f}\;\Varid{g}\mathrel{=}\Varid{id}+(\Varid{f}\times(\Varid{g}\times\Varid{g})){}\<[E]%
+\>[B]{}\Varid{baseBdt}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\Varid{f}+(\Varid{g}\times(\Varid{h}\times\Varid{h})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{recBdt}\;\Varid{f}\mathrel{=}\Varid{id}+(\Varid{id}\times(\Varid{f}\times\Varid{f})){}\<[E]%
+\>[B]{}\Varid{recBdt}\;\Varid{f}\mathrel{=}\Varid{baseBdt}\;\Varid{id}\;\Varid{id}\;\Varid{f}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{cataBdt}\;\Varid{g}\mathrel{=}\Varid{g}\comp (\Varid{recBdt}\;(\Varid{cataBdt}\;\Varid{g}))\comp \Varid{outBdt}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\ana{\Varid{g}}\mathrel{=}\Varid{inBdt}\comp (\Varid{recBdt}\;\ana{\Varid{g}})\comp \Varid{g}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\subsection*{Diagrama do Anamorfismo}
 
 \begin{eqnarray*}
 \xymatrix@C=2cm{
@@ -1734,7 +1745,7 @@ Foi também desenvolvida um versão utilizando o operador bind
            \ar[u]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\ana{\Varid{g}}\;^2)}}
 }
 \end{eqnarray*}
-\subsection*{extLTree}
+\subsection*{ExtLTree}
 A diferença em termos estruturais entre os dois tipos de dados é a presença da String nos nodos, informação que irá ser removida na transformação para LTree
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -1749,7 +1760,7 @@ A diferença em termos estruturais entre os dois tipos de dados é a presença d
 \ColumnHook
 \end{hscode}\resethooks
 
-\subsection*{navLTree}
+\subsection*{NavLTree}
 
 Versão pointfree
 
@@ -1803,7 +1814,7 @@ Versão pointwise
 \end{eqnarray*}
 
 \subsection*{Problema 4}
-\subsection*{bnavLTree}
+\subsection*{BnavLTree}
 Versão pointfree
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -1811,8 +1822,6 @@ Versão pointfree
 \column{11}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{y}\mathrel{=}\Conid{Node}\;(\Conid{True},(\Conid{Node}\;(\Conid{True},(\Conid{Empty},\Conid{Empty})),\Conid{Empty})){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{outNode}\;(\Conid{Node}\;(\Varid{a},(\Varid{b},\Varid{c})))\mathrel{=}(\Varid{a},(\Varid{b},\Varid{c})){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{bnavLTree}\mathrel{=}\cata{\alt{\underline{\cdot }\comp \Conid{Leaf}}{\lambda (\Varid{l},\Varid{r})\to \Varid{\Conid{Cp}.cond}\;(\Conid{Empty}\equiv )\;(\Varid{g}\;(\Varid{l},\Varid{r}))\;(\Varid{h}\;(\Varid{l},\Varid{r}))}}{}\<[E]%
 \\
@@ -1824,6 +1833,9 @@ Versão pointfree
 \\
 \>[5]{}\hsindent{6}{}\<[11]%
 \>[11]{}\Varid{h}\;(\Varid{l},\Varid{r})\mathrel{=}\Varid{\Conid{Cp}.cond}\;(\p1\comp \Varid{outNode})\;(\Varid{l}\comp \p1\comp \p2\comp \Varid{outNode})\;(\Varid{r}\comp \p2\comp \p2\comp \Varid{outNode}){}\<[E]%
+\\
+\>[5]{}\hsindent{6}{}\<[11]%
+\>[11]{}\Varid{outNode}\;(\Conid{Node}\;(\Varid{a},(\Varid{b},\Varid{c})))\mathrel{=}(\Varid{a},(\Varid{b},\Varid{c})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 Versão pointwise
@@ -1864,7 +1876,7 @@ Versão pointwise
 }
 \end{eqnarray*}
 
-\subsection*{pbnavLTree}
+\subsection*{PbnavLTree}
 Esta função irá percorrer uma LTree representante de uma situação onde em que a decisão depende de vários 
 fatores que são testados sucessivamente. A probabilidade de ocorrência, ou não, de cada fator é representada por 
 \textbf{Dist Bool}. Devido à natureza sucessiva destes acontecimentos, as suas probabilidades estão organizadas numa
