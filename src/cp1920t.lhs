@@ -1059,6 +1059,7 @@ dic_rd s d = while2 p loopBody exit (s,Just d) where
                                          |otherwise = f l 
                    where f = (either nothing (Just . cons)) . outList . map (either id p1) . filter (isLeft) . map (outExp) 
             
+
 loopBody (s,Just (Var v)) = (s,Nothing)
 loopBody(s,Just (Term o l)) | (o == []) = (s, termLsearch s l)
                   | (head s == head o) = (tail s,termLsearch (tail s) l)
@@ -1084,7 +1085,7 @@ dic_in p t d = hyloExp conquer divide (Just $ traductionToDict (p,t), d) where
         divide (Nothing, g) = i1(g)
         divide (_,Var l) = i1(Var l)
         divide (Just (Term x xs),Term o l) | (o == []) =  i2 $ (o,divide_aux (Term x xs) (False,l))
-             | (head x == head o) = i2 $ (o,divide_aux (head xs) (False,l))
+                                           | (head x == head o) = i2 $ (o,divide_aux (head xs) (False,l))
                                            | otherwise = i1(Term o l)
 
 traductionToDict :: (String,String) -> Dict
@@ -1378,7 +1379,8 @@ a ditar a navegação e não uma lista de Boleanos.
 bnavLTree = cataLTree (either (const . Leaf) (\(l,r)-> Cp.cond (Empty ==) (g (l,r)) (h (l,r))))
     where f = (const . Leaf)
           g (l,r) = Fork . split l r
-          h (l,r) = Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode)
+          --h (l,r) = Cp.cond (p1 . outNode) (l . p1 . p2. outNode) (r . p2 . p2 . outNode)
+          h (l,r) = (Cp.cond (p1) (l . p1 . p2) (r . p2 . p2 )) . outNode
           outNode (Node(a,(b,c))) = (a,(b,c))
 
 \end{code}
@@ -1430,8 +1432,8 @@ ao contrário do que acontece com extract, na função anterior.
 pbnavLTree = cataLTree g
   where g = either (\a _ -> return (Leaf a)) f where
             f (l, r) Empty = (prod (l Empty) (r Empty)) >>= (return . Fork)
-            f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
-
+            --f (l, r) (Node(d,(b1,b2))) = Probability.cond d (l b1) (r b2)
+            f (l,r) (Node(d,(b1,b2))) = d >>= (\x -> if x then l b1 else r b2)
 
 \end{code}
 
@@ -1489,8 +1491,10 @@ generateMatrix i j =  (sequence . replicate (i * j) $ randomRIO(0,1) >>= generat
                     y' <- map (80 *) [0..(fromIntegral j)-1]; 
                     return(put(x',y'))}
 
-
-generateTruchet :: Monad m => Integer -> m Picture
+zzz i j = do { x' <- map (80 *) [0..(fromIntegral i)-1];
+                    y' <- map (80 *) [0..(fromIntegral j)-1]; 
+                    return(put(x',y'))}
+generateTruchet :: Integer -> IO Picture
 generateTruchet = return . (Cp.cond (==0) (const truchet1) (const truchet2))
 
 
